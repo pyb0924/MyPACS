@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net5.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ApplicationIcon />
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="x64\**" />
+    <EmbeddedResource Remove="x64\**" />
+    <None Remove="x64\**" />
+    <Page Remove="x64\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Resources\direction-adjustment.svg" />
+    <None Remove="Resources\flip-horizontal.png" />
+    <None Remove="Resources\flip-vertical.png" />
+    <None Remove="Resources\grid-four.svg" />
+    <None Remove="Resources\icon.ico" />
+    <None Remove="Resources\instance.png" />
+    <None Remove="Resources\MicroDicom.ico" />
+    <None Remove="Resources\patient.png" />
+    <None Remove="Resources\refresh.svg" />
+    <None Remove="Resources\revert.png" />
+    <None Remove="Resources\rotate.svg" />
+    <None Remove="Resources\rotation-horizontal.svg" />
+    <None Remove="Resources\rotation-vertical.svg" />
+    <None Remove="Resources\series.png" />
+    <None Remove="Resources\study.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="fo-dicom" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\flip-horizontal.png" />
+    <Resource Include="Resources\flip-vertical.png" />
+    <Resource Include="Resources\icon.ico" />
+    <Resource Include="Resources\instance.png" />
+    <Resource Include="Resources\patient.png" />
+    <Resource Include="Resources\revert.png" />
+    <Resource Include="Resources\series.png" />
+    <Resource Include="Resources\study.png" />
+  </ItemGroup>
+
+</Project>
