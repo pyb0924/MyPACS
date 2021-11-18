@@ -6,10 +6,11 @@
 
 int main()
 {
+    std::cout << "Hello World!\n";
     MyPACSServer server;
     //MyPACSServer server("config.xml");
     server.run();
-    std::cout << "Hello World!\n";
+    
     return 0;
 }
 
