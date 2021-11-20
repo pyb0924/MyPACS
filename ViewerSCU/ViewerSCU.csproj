@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="fo-dicom" Version="5.0.1" />
+    <PackageReference Include="fo-dicom.Desktop" Version="4.0.8" />
   </ItemGroup>
 
 </Project>

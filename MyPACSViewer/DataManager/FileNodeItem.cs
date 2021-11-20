@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
-using FellowOakDicom;
+using Dicom;
 
-namespace MyPACSViewer
+namespace MyPACSViewer.DataManager
 {
     internal class FileNodeItem
     {

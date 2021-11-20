@@ -12,7 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace MyPACSViewer
+namespace MyPACSViewer.Components
 {
     /// <summary>
     /// Interaction logic for Viewer2D.xaml

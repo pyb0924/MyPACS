@@ -13,7 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace MyPACSViewer.Controls
+namespace MyPACSViewer.Components
 {
     /// <summary>
     /// Interaction logic for ToolbarButton.xaml

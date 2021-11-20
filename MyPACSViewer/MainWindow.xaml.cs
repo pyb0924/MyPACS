@@ -14,37 +14,49 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-using FellowOakDicom;
+using Dicom;
 using System.IO;
-using FellowOakDicom.Imaging;
-using FellowOakDicom.Imaging.Render;
-using static MyPACSViewer.Utils.Utils;
+using Dicom.Imaging;
+using Dicom.Log;
+using Dicom.Imaging.Render;
+
+using MyPACSViewer.Utils;
+using MyPACSViewer.DataManager;
+using MyPACSViewer.Components;
 
 namespace MyPACSViewer
 {
-    
+
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
     public partial class MainWindow : Window
     {
+        #region FIELDS
+
         private readonly Dictionary<string, FileNodeItem> _DicomDict;
         private DicomDataset _MainDataset;
         private DicomDataset _MaskDataset;
-        private bool _MaskMode;
-
-
+        private bool _UseMask;
         private DisplayMode _DisplayMode;
+        private SpatialTransform _Transform;
 
+        #endregion
 
+        #region CONSTRUCTOR
         public MainWindow()
         {
             InitializeComponent();
-            _MaskMode = false;
+            _DicomDict = new();
+            _UseMask = false;
             _DisplayMode = DisplayMode.MODE_2D;
+            ImageManager.SetImplementation(WPFImageManager.Instance);
+            LogManager.SetImplementation(null);
         }
+        #endregion
 
-        
+        #region INNER_METHOD
+
         // return count of files opened successfully
         private async Task<int> GenerateDicomDict(FileInfo[] files)
         {
@@ -114,7 +126,7 @@ namespace MyPACSViewer
                 }
             }
 
-            fileExplorer.ItemsSource = _DicomDict.Values;
+            FileExplorer.ItemsSource = new List<FileNodeItem>(_DicomDict.Values);
             return files.Length - errorCount;
         }
 
@@ -123,30 +135,59 @@ namespace MyPACSViewer
             switch (_DisplayMode)
             {
                 case DisplayMode.MODE_2D:
-                    Display2DView();
+                    Render2DView();
                     break;
                 case DisplayMode.MODE_3D:
-                    Display3DView(Display3DPlane.TRANSVERSE);
-                    Display3DView(Display3DPlane.CORONAL);
-                    Display3DView(Display3DPlane.SAGITTAL);
-                    Display3DView(Display3DPlane.VOLUME_RENDERING);
+                    Render3DView(Display3DPlane.TRANSVERSE);
+                    Render3DView(Display3DPlane.CORONAL);
+                    Render3DView(Display3DPlane.SAGITTAL);
+                    //Render3DView(Display3DPlane.VOLUME_RENDERING);
+                    break;
+                default:
+                    break;
+            }
+            ChangeVisibility();
+        }
+
+        private void ChangeVisibility()
+        {
+            switch (_DisplayMode)
+            {
+                case DisplayMode.MODE_2D:
+                    Viewer3D_0.Visibility = Visibility.Hidden;
+                    Viewer3D_1.Visibility = Visibility.Hidden;
+                    Viewer3D_2.Visibility = Visibility.Hidden;
+                    Viewer2D.Visibility = Visibility.Visible;
+                    break;
+                case DisplayMode.MODE_3D:
+                    Viewer2D.Visibility = Visibility.Hidden;
+                    Viewer3D_0.Visibility = Visibility.Visible;
+                    Viewer3D_1.Visibility = Visibility.Visible;
+                    Viewer3D_2.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
             }
         }
 
-        private void Display2DView()
+        private void Render2DView()
+        {
+            DicomImage image = new(_MainDataset);
+
+            WriteableBitmap bitmap = image.RenderImage().As<WriteableBitmap>();
+            test.Source = bitmap;
+        }
+
+        private void Render3DView(Display3DPlane plane)
         {
 
         }
 
-        private void Display3DView(Display3DPlane plane)
-        {
-
-        }
-
+        #endregion
         // menu click 
+
+        #region BUTTON_CLICK
+
         private async void OpenFileMenu_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new();
@@ -220,7 +261,7 @@ namespace MyPACSViewer
 
 
         // toolBar button click
-        
+
         private void FlipHorizontalBtn_Click(object sender, RoutedEventArgs e)
         {
 
@@ -233,7 +274,7 @@ namespace MyPACSViewer
 
         private void SplitMergeBtn_Click(object sender, RoutedEventArgs e)
         {
-            Controls.ToolbarButton toolbarButton = (Controls.ToolbarButton)sender;
+            ToolbarButton toolbarButton = (ToolbarButton)sender;
             switch (_DisplayMode)
             {
                 case DisplayMode.MODE_2D:
@@ -255,6 +296,21 @@ namespace MyPACSViewer
         private void RevertBtn_Click(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        #endregion
+
+
+
+        private void FileExplorer_PreviewMouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            if (FileExplorer.SelectedItem != null)
+            {
+                FileNodeItem fileNodeItem = FileExplorer.SelectedItem as FileNodeItem;
+                if (fileNodeItem.Path == null) return;
+                _MainDataset = DicomFile.Open(fileNodeItem.Path).Dataset;
+                Display();
+            }
         }
     }
 }

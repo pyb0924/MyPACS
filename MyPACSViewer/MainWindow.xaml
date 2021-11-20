@@ -3,8 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:controls="clr-namespace:MyPACSViewer.Controls"
         xmlns:local="clr-namespace:MyPACSViewer"
+        xmlns:components="clr-namespace:MyPACSViewer.Components"
+        xmlns:data="clr-namespace:MyPACSViewer.DataManager"
         mc:Ignorable="d"
         Title="MyPACSViewer" Icon="/Resources/icon.ico" Height="720" Width="1280">
     <Grid>
@@ -33,17 +34,17 @@
             </Menu>
 
             <ToolBar  DockPanel.Dock="Top">
-                <controls:ToolbarButton x:Name="FlipHorizontalBtn" Click="FlipHorizontalBtn_Click" 
+                <components:ToolbarButton x:Name="FlipHorizontalBtn" Click="FlipHorizontalBtn_Click" 
                                         Source="../Resources/flip-horizontal.png" Text="Flip Horizontal"/>
                 <Separator/>
-                <controls:ToolbarButton x:Name="FlipVerticalBtn" Click="FlipVerticalBtn_Click"
+                <components:ToolbarButton x:Name="FlipVerticalBtn" Click="FlipVerticalBtn_Click"
                       Source="../Resources/flip-vertical.png" Text="Flip Vertical"/>
                 <Separator/>
-                <controls:ToolbarButton x:Name="SplitMergeBtn" Click="SplitMergeBtn_Click" 
+                <components:ToolbarButton x:Name="SplitMergeBtn" Click="SplitMergeBtn_Click" 
                                         Source="../Resources/window-split.png" Text="3D View"/>
 
                 <Separator/>
-                <controls:ToolbarButton x:Name="RevertBtn" Click="RevertBtn_Click" 
+                <components:ToolbarButton x:Name="RevertBtn" Click="RevertBtn_Click" 
                                         Source="../Resources/revert.png" Text="Revert All"/>
             </ToolBar>
 
@@ -52,11 +53,11 @@
                     <TextBlock x:Name="StatusBarText"/>
                 </StatusBarItem>
             </StatusBar>
-            
+
             <DockPanel>
-                <TreeView x:Name="fileExplorer" DockPanel.Dock="Left" Width="Auto" MinWidth="300"> 
+                <TreeView x:Name="FileExplorer" DockPanel.Dock="Left" Width="Auto" MinWidth="300" PreviewMouseDoubleClick="FileExplorer_PreviewMouseDoubleClick">
                     <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate DataType="{x:Type local:FileNodeItem}" ItemsSource="{Binding Path=Children.Values}">
+                        <HierarchicalDataTemplate DataType="{x:Type data:FileNodeItem}" ItemsSource="{Binding Path=Children.Values}">
                             <StackPanel Orientation="Horizontal" Margin="2">
                                 <Image Source="{Binding Icon}" Height="15" Margin="0,0,5,0"/>
                                 <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}"></TextBlock>
@@ -67,7 +68,8 @@
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-                <Grid x:Name="MainViewer">
+                
+                <Grid x:Name="MainViewer" Background="Black">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
@@ -77,15 +79,16 @@
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
 
-                    <local:Viewer2D x:Name="Viewer2D" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Background="Black"/>
-                    <local:Viewer2D x:Name="Viewer3D_0" Grid.Column="0" Grid.Row="0" Background="Black" Visibility="Hidden"/>
-                    <local:Viewer2D x:Name="Viewer3D_1" Grid.Column="1" Grid.Row="0" Background="Black" Visibility="Hidden"/>
-                    <local:Viewer2D x:Name="Viewer3D_2" Grid.Column="0" Grid.Row="1" Background="Black" Visibility="Hidden"/>
+                    <Image x:Name="test" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2"/>
+                    <components:Viewer2D x:Name="Viewer2D" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2"/>
+                    <components:Viewer2D x:Name="Viewer3D_0" Grid.Column="0" Grid.Row="0" Visibility="Hidden"/>
+                    <components:Viewer2D x:Name="Viewer3D_1" Grid.Column="1" Grid.Row="0" Visibility="Hidden"/>
+                    <components:Viewer2D x:Name="Viewer3D_2" Grid.Column="0" Grid.Row="1" Visibility="Hidden"/>
 
                 </Grid>
             </DockPanel>
-            
+
         </DockPanel>
-        
+
     </Grid>
 </Window>
