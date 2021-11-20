@@ -18,9 +18,11 @@ using FellowOakDicom;
 using System.IO;
 using FellowOakDicom.Imaging;
 using FellowOakDicom.Imaging.Render;
+using static MyPACSViewer.Utils.Utils;
 
 namespace MyPACSViewer
 {
+    
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
@@ -29,18 +31,20 @@ namespace MyPACSViewer
         private readonly Dictionary<string, FileNodeItem> _DicomDict;
         private DicomDataset _MainDataset;
         private DicomDataset _MaskDataset;
+        private bool _MaskMode;
 
-        private enum DisplayMode { MODE_2D, MODE_3D };
-        private DisplayMode _mode;
+
+        private DisplayMode _DisplayMode;
 
 
         public MainWindow()
         {
             InitializeComponent();
-            _DicomDict = new();
-            _mode = DisplayMode.MODE_2D;
+            _MaskMode = false;
+            _DisplayMode = DisplayMode.MODE_2D;
         }
 
+        
         // return count of files opened successfully
         private async Task<int> GenerateDicomDict(FileInfo[] files)
         {
@@ -114,28 +118,36 @@ namespace MyPACSViewer
             return files.Length - errorCount;
         }
 
-        private void Display(DicomDataset dataset)
+        private void Display()
         {
-            switch(_mode)
+            switch (_DisplayMode)
             {
                 case DisplayMode.MODE_2D:
-                    DicomImage dcmImage = new(dataset);
+                    Display2DView();
                     break;
                 case DisplayMode.MODE_3D:
-                    //TODO
+                    Display3DView(Display3DPlane.TRANSVERSE);
+                    Display3DView(Display3DPlane.CORONAL);
+                    Display3DView(Display3DPlane.SAGITTAL);
+                    Display3DView(Display3DPlane.VOLUME_RENDERING);
+                    break;
+                default:
                     break;
             }
-            
+        }
+
+        private void Display2DView()
+        {
 
         }
 
-        void Display2DView(DicomDataset dataset, Constant.DisplayPlane plane, bool displayVR = false)
+        private void Display3DView(Display3DPlane plane)
         {
 
         }
 
         // menu click 
-        private void OpenFileMenu_Click(object sender, RoutedEventArgs e)
+        private async void OpenFileMenu_Click(object sender, RoutedEventArgs e)
         {
             OpenFileDialog openFileDialog = new();
             openFileDialog.Title = "Open DICOM File";
@@ -154,7 +166,7 @@ namespace MyPACSViewer
             FileInfo[] files = { new FileInfo(openFileDialog.FileName) };
             try
             {
-                _ = GenerateDicomDict(files);
+                _ = await GenerateDicomDict(files);
                 StatusBarText.Text = "Open File Successfully!";
             }
             catch (Exception ex)
@@ -162,8 +174,8 @@ namespace MyPACSViewer
                 StatusBarText.Text = ex.Message;
                 return;
             }
-            DicomDataset dataset = DicomFile.Open(openFileDialog.FileName).Dataset;
-            Display(dataset);
+            _MainDataset = DicomFile.Open(openFileDialog.FileName).Dataset;
+            Display();
         }
 
         private async void OpenFolderMenu_Click(object sender, RoutedEventArgs e)
@@ -187,8 +199,8 @@ namespace MyPACSViewer
                 return;
             }
 
-            DicomDataset dataset = DicomFile.Open(files[0].FullName).Dataset;
-            Display(dataset);
+            _MainDataset = DicomFile.Open(files[0].FullName).Dataset;
+            Display();
         }
 
         private void QueryRetrieveMenu_Click(object sender, RoutedEventArgs e)
@@ -208,17 +220,39 @@ namespace MyPACSViewer
 
 
         // toolBar button click
+        
+        private void FlipHorizontalBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void FlipVerticalBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void SplitMergeBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Controls.ToolbarButton toolbarButton = (Controls.ToolbarButton)sender;
+            switch (_DisplayMode)
+            {
+                case DisplayMode.MODE_2D:
+                    _DisplayMode = DisplayMode.MODE_3D;
+                    toolbarButton.Source = "/Resources/window-merge.png";
+                    toolbarButton.Text = "2D View";
+                    break;
+                case DisplayMode.MODE_3D:
+                    _DisplayMode = DisplayMode.MODE_2D;
+                    toolbarButton.Source = "/Resources/window-split.png";
+                    toolbarButton.Text = "3D View";
+                    break;
+                default:
+                    break;
+            }
+            Display();
+        }
+
         private void RevertBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Rotate_verticalBtn_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void Rotate_horizontalBtn_Click(object sender, RoutedEventArgs e)
         {
 
         }

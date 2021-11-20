@@ -31,6 +31,8 @@
     <None Remove="Resources\rotation-vertical.svg" />
     <None Remove="Resources\series.png" />
     <None Remove="Resources\study.png" />
+    <None Remove="Resources\window-merge.png" />
+    <None Remove="Resources\window-split.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -46,6 +48,12 @@
     <Resource Include="Resources\revert.png" />
     <Resource Include="Resources\series.png" />
     <Resource Include="Resources\study.png" />
+    <Resource Include="Resources\window-merge.png" />
+    <Resource Include="Resources\window-split.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Pages\" />
   </ItemGroup>
 
 </Project>

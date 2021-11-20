@@ -3,7 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:svgc="http://sharpvectors.codeplex.com/svgc/"
+        xmlns:controls="clr-namespace:MyPACSViewer.Controls"
         xmlns:local="clr-namespace:MyPACSViewer"
         mc:Ignorable="d"
         Title="MyPACSViewer" Icon="/Resources/icon.ico" Height="720" Width="1280">
@@ -33,26 +33,18 @@
             </Menu>
 
             <ToolBar  DockPanel.Dock="Top">
-                <Button x:Name="Rotate_horizontalBtn" Click="Rotate_horizontalBtn_Click">
-                    <StackPanel>
-                        <Image Height="30" Source="/Resources/flip-horizontal.png"/>
-                        <AccessText Text="Flip Horizontal"></AccessText>
-                    </StackPanel>
-                </Button>
+                <controls:ToolbarButton x:Name="FlipHorizontalBtn" Click="FlipHorizontalBtn_Click" 
+                                        Source="../Resources/flip-horizontal.png" Text="Flip Horizontal"/>
                 <Separator/>
-                <Button x:Name="Rotate_verticalBtn" Click="Rotate_verticalBtn_Click">
-                    <StackPanel>
-                        <Image Height="30"  Source="/Resources/flip-vertical.png"/>
-                        <AccessText Text="Flip Vertical"></AccessText>
-                    </StackPanel>
-                </Button>
+                <controls:ToolbarButton x:Name="FlipVerticalBtn" Click="FlipVerticalBtn_Click"
+                      Source="../Resources/flip-vertical.png" Text="Flip Vertical"/>
                 <Separator/>
-                <Button x:Name="RevertBtn" Click="RevertBtn_Click">
-                    <StackPanel>
-                        <Image Height="30"  Source="/Resources/revert.png"/>
-                        <AccessText Text="Revert All"></AccessText>
-                    </StackPanel>
-                </Button>
+                <controls:ToolbarButton x:Name="SplitMergeBtn" Click="SplitMergeBtn_Click" 
+                                        Source="../Resources/window-split.png" Text="3D View"/>
+
+                <Separator/>
+                <controls:ToolbarButton x:Name="RevertBtn" Click="RevertBtn_Click" 
+                                        Source="../Resources/revert.png" Text="Revert All"/>
             </ToolBar>
 
             <StatusBar x:Name="StatusBar" DockPanel.Dock="Bottom" Height="24">
@@ -86,7 +78,10 @@
                     </Grid.RowDefinitions>
 
                     <local:Viewer2D x:Name="Viewer2D" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2" Background="Black"/>
-                
+                    <local:Viewer2D x:Name="Viewer3D_0" Grid.Column="0" Grid.Row="0" Background="Black" Visibility="Hidden"/>
+                    <local:Viewer2D x:Name="Viewer3D_1" Grid.Column="1" Grid.Row="0" Background="Black" Visibility="Hidden"/>
+                    <local:Viewer2D x:Name="Viewer3D_2" Grid.Column="0" Grid.Row="1" Background="Black" Visibility="Hidden"/>
+
                 </Grid>
             </DockPanel>
             
