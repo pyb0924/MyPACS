@@ -20,6 +20,7 @@
     <None Remove="Resources\direction-adjustment.svg" />
     <None Remove="Resources\flip-horizontal.png" />
     <None Remove="Resources\flip-vertical.png" />
+    <None Remove="Resources\focus.png" />
     <None Remove="Resources\grid-four.svg" />
     <None Remove="Resources\icon.ico" />
     <None Remove="Resources\instance.png" />
@@ -39,6 +40,7 @@
   <ItemGroup>
     <Resource Include="Resources\flip-horizontal.png" />
     <Resource Include="Resources\flip-vertical.png" />
+    <Resource Include="Resources\focus.png" />
     <Resource Include="Resources\icon.ico" />
     <Resource Include="Resources\instance.png" />
     <Resource Include="Resources\patient.png" />

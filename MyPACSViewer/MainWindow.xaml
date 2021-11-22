@@ -8,6 +8,7 @@
         xmlns:data="clr-namespace:MyPACSViewer.DataManager"
         mc:Ignorable="d"
         Title="MyPACSViewer" Icon="/Resources/icon.ico" Height="720" Width="1280">
+   
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top" FontSize="14" Padding="5">
@@ -20,8 +21,8 @@
                     <MenuItem x:Name="ExitMenu" Header="Exit" Click="ExitMenu_Click"/>
                 </MenuItem>
 
-                <MenuItem Header="Processing">
-                    <MenuItem Header="SetCenter"/>
+                <MenuItem Header="Image">
+                    <MenuItem Header="Reset Center"/>
                     <MenuItem Header="Zoom"/>
                     <MenuItem Header="Flip Horizontal"/>
                     <MenuItem Header="Flip Vertical"/>
@@ -42,7 +43,9 @@
                 <Separator/>
                 <components:ToolbarButton x:Name="SplitMergeBtn" Click="SplitMergeBtn_Click" 
                                         Source="../Resources/window-split.png" Text="3D View"/>
-
+                <Separator/>
+                <components:ToolbarButton x:Name="ResetFocusBtn" Click="ResetFocusBtn_Click"
+                                          Source="../Resources/focus.png" Text="Reset Focus"/>
                 <Separator/>
                 <components:ToolbarButton x:Name="RevertBtn" Click="RevertBtn_Click" 
                                         Source="../Resources/revert.png" Text="Revert All"/>
@@ -68,23 +71,18 @@
                         </HierarchicalDataTemplate>
                     </TreeView.ItemTemplate>
                 </TreeView>
-                
-                <Grid x:Name="MainViewer" Background="Black">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="*"/>
-                        <RowDefinition Height="*"/>
-                    </Grid.RowDefinitions>
 
-                    <Image x:Name="test" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2"/>
-                    <components:Viewer2D x:Name="Viewer2D" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="0" Grid.RowSpan="2"/>
-                    <components:Viewer2D x:Name="Viewer3D_0" Grid.Column="0" Grid.Row="0" Visibility="Hidden"/>
-                    <components:Viewer2D x:Name="Viewer3D_1" Grid.Column="1" Grid.Row="0" Visibility="Hidden"/>
-                    <components:Viewer2D x:Name="Viewer3D_2" Grid.Column="0" Grid.Row="1" Visibility="Hidden"/>
+                <Grid>
+                    <components:Viewer2D x:Name="Viewer2D" Background="Blue"/>
+                    <components:Viewer3D x:Name="Viewer3D" Visibility="Hidden" Background="Green"/>
 
+
+                    <Canvas>
+                        <TextBlock x:Name="LeftTopText" Canvas.Left="10" Canvas.Top="10"/>
+                        <TextBlock x:Name="LeftBottomText" Canvas.Left="10" Canvas.Bottom="10"/>
+                        <TextBlock x:Name="RightTopText" Canvas.Right="10" Canvas.Top="10"/>
+                        <TextBlock x:Name="RightBottomText" Canvas.Right="10" Canvas.Top="10"/>
+                    </Canvas>
                 </Grid>
             </DockPanel>
 

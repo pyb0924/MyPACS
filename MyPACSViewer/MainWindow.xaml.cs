@@ -154,16 +154,12 @@ namespace MyPACSViewer
             switch (_DisplayMode)
             {
                 case DisplayMode.MODE_2D:
-                    Viewer3D_0.Visibility = Visibility.Hidden;
-                    Viewer3D_1.Visibility = Visibility.Hidden;
-                    Viewer3D_2.Visibility = Visibility.Hidden;
+                    Viewer3D.Visibility = Visibility.Hidden;
                     Viewer2D.Visibility = Visibility.Visible;
                     break;
                 case DisplayMode.MODE_3D:
                     Viewer2D.Visibility = Visibility.Hidden;
-                    Viewer3D_0.Visibility = Visibility.Visible;
-                    Viewer3D_1.Visibility = Visibility.Visible;
-                    Viewer3D_2.Visibility = Visibility.Visible;
+                    Viewer3D.Visibility = Visibility.Visible;
                     break;
                 default:
                     break;
@@ -175,7 +171,7 @@ namespace MyPACSViewer
             DicomImage image = new(_MainDataset);
 
             WriteableBitmap bitmap = image.RenderImage().As<WriteableBitmap>();
-            test.Source = bitmap;
+            Viewer2D.Source = bitmap;
         }
 
         private void Render3DView(Display3DPlane plane)
@@ -293,6 +289,21 @@ namespace MyPACSViewer
             Display();
         }
 
+        private void ResetFocusBtn_Click(object sender, RoutedEventArgs e)
+        {
+            switch (_DisplayMode)
+            {
+                case DisplayMode.MODE_2D:
+                    Viewer2D.FocusX = Viewer2D.ActualWidth / 2;
+                    Viewer2D.FocusY = Viewer2D.ActualHeight / 2;
+                    break;
+                case DisplayMode.MODE_3D:
+                    break;
+                default:
+                    break;
+            }
+        }
+
         private void RevertBtn_Click(object sender, RoutedEventArgs e)
         {
 
@@ -312,5 +323,7 @@ namespace MyPACSViewer
                 Display();
             }
         }
+
+        
     }
 }
