@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyPACSViewer"
         xmlns:components="clr-namespace:MyPACSViewer.Components"
-        xmlns:data="clr-namespace:MyPACSViewer.DataManager"
+        xmlns:data="clr-namespace:MyPACSViewer.DataItems"
         mc:Ignorable="d"
         Title="MyPACSViewer" Icon="/Resources/icon.ico" Height="720" Width="1280">
    

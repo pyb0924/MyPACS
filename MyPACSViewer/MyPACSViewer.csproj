@@ -52,10 +52,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Pages\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="fo-dicom.Desktop" Version="4.0.8" />
   </ItemGroup>
 

@@ -1,15 +1,18 @@
-// MyPACSServer.cpp : This file contains the 'main' function. Program execution begins and ends there.
+// main.cpp : This file contains the 'main' function. Program execution begins and ends there.
 //
 
 #include <iostream>
+#include <cassert>
 #include "MyPACSServer.h"
 
-int main()
+int main(int argc, char* argv[])
 {
-    std::cout << "Hello World!\n";
-    MyPACSServer server;
-    //MyPACSServer server("config.xml");
-    return 0;
+	std::cout << "Hello World!\n";
+	assert(argc < 3);
+	std::string configPath = argc == 2 ? argv[1] : "config.ini";
+	MyPACSServer server(configPath);
+	server.run();
+	return 0;
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

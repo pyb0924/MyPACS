@@ -21,7 +21,7 @@ using Dicom.Log;
 using Dicom.Imaging.Render;
 
 using MyPACSViewer.Utils;
-using MyPACSViewer.DataManager;
+using MyPACSViewer.DataItems;
 using MyPACSViewer.Components;
 
 namespace MyPACSViewer
@@ -242,7 +242,8 @@ namespace MyPACSViewer
 
         private void QueryRetrieveMenu_Click(object sender, RoutedEventArgs e)
         {
-
+            QRConfigWindow qrConfigWindow = new();
+            qrConfigWindow.ShowDialog();
         }
 
         private void ExportMenu_Click(object sender, RoutedEventArgs e)

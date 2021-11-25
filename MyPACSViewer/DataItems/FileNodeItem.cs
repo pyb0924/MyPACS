@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Dicom;
 
-namespace MyPACSViewer.DataManager
+namespace MyPACSViewer.DataItems
 {
     internal class FileNodeItem
     {

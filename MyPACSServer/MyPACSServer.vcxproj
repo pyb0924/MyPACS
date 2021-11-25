@@ -78,8 +78,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>D:\boost_1_77_0\boost_1_77_0;D:\dcmtk\dcmtk-3.6.6-win64-support-MD-iconv-msvc-15.8\zlib-1.2.11\include;D:\dcmtk\include;$(IncludePath)</IncludePath>
-    <LibraryPath>D:\dcmtk\dcmtk-3.6.6-win64-support-MD-iconv-msvc-15.8\zlib-1.2.11\lib;D:\dcmtk\lib;D:\boost_1_77_0\boost_1_77_0\stage\lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>D:\boost_1_77_0\boost_1_77_0;D:\dcmtk\dcmtk-3.6.6-win64-support-MD-iconv-msvc-15.8\zlib-1.2.11\include;D:\dcmtk\include;D:\mysql-connector-c++-8.0.27-winx64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\mysql-connector-c++-8.0.27-winx64\lib64\vs14\debug;D:\dcmtk\dcmtk-3.6.6-win64-support-MD-iconv-msvc-15.8\zlib-1.2.11\lib;D:\dcmtk\lib;D:\boost_1_77_0\boost_1_77_0\stage\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -142,14 +142,19 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="testServer.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="MyPACSDB.cpp" />
     <ClCompile Include="MyPACSServer.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="MyPACSDB.h" />
     <ClInclude Include="MyPACSServer.h" />
   </ItemGroup>
   <ItemGroup>
-    <Xml Include="config.xml" />
+    <Xml Include="config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="create.sql" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

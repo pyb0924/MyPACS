@@ -5,13 +5,20 @@
 
 #include <boost/log/trivial.hpp>
 #include <boost/log/sources/severity_channel_logger.hpp>
+#include <boost/property_tree/ptree.hpp>
 
+#include <dcmtk/config/osconfig.h>
+#include <dcmtk/ofstd/ofcond.h>
+#include <dcmtk/dcmnet/assoc.h>
+#include <dcmtk/dcmnet/dimse.h>
+#include <dcmtk/dcmnet/dcasccfg.h>
+#include <dcmtk/dcmdata/dcfilefo.h>
 
-#include "dcmtk/dcmnet/diutil.h"
-#include "dcmtk/dcmnet/dcasccfg.h"
+#include "MyPACSDB.h"
 
 namespace logging = boost::log;
 namespace src = boost::log::sources;
+namespace pt = boost::property_tree;
 
 struct SCPConfigInfo
 {
@@ -19,24 +26,24 @@ struct SCPConfigInfo
 	std::string m_aeTitle;
 };
 
-struct DBConfigInfo
+
+struct StoreCallbackData
 {
-	std::string host;
-	int port;
-	std::string username;
-	std::string password;
-	std::string schema;
-	std::string table;
+	DcmFileFormat* dcmff;
+	T_ASC_Association* assoc;
+	E_TransferSyntax writeTransferSyntax = EXS_Unknown;
+	DBConfigInfo dbConfig;
+	pt::ptree ptConfig;
 };
 
 class MyPACSServer
 {
 public:
-	MyPACSServer();
-	MyPACSServer(std::string configXMLPath);
+	MyPACSServer(std::string configPath);
 	void run();
 private:
-	bool ParseConfig(std::string configXMLPath);
+	template <class T>
+	T GetProperty(std::string child, std::string key, const T& defaultValue);
 
 	OFCondition AcceptAssociation(T_ASC_Network* net, DcmAssociationConfiguration& asccfg);
 	OFCondition ProcessCommands(T_ASC_Association* assoc);
@@ -45,10 +52,10 @@ private:
 	OFCondition FindSCP(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID presID);
 	OFCondition GetSCP(T_ASC_Association* assoc, T_DIMSE_Message* msg, T_ASC_PresentationContextID presID);
 
-	std::list<std::string> GetLocalPathFromDB(std::string selectSQL);
 private:
 	SCPConfigInfo scpConfig;
 	DBConfigInfo dbConfig;
+	pt::ptree ptConfig;
 	src::severity_channel_logger<logging::trivial::severity_level, std::string> logger;
 };
 

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using System.Configuration;
 using FellowOakDicom;
 using FellowOakDicom.Network;
 using FellowOakDicom.Network.Client;
@@ -32,6 +33,19 @@ namespace ViewerSCU
             Port = port;
             ServerAET = serverAET;
             Aet = aet;
+            Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
+            Client.NegotiateAsyncOps();
+        }
+
+        public ViewerSCU(string configFilePath)
+        {
+            ExeConfigurationFileMap map = new();
+            map.ExeConfigFilename = configFilePath;
+            Configuration config = ConfigurationManager.OpenMappedExeConfiguration(map, ConfigurationUserLevel.None);
+            Host=config.AppSettings.Settings["host"].Value;
+            Port = int.Parse(config.AppSettings.Settings["port"].Value);
+            ServerAET = config.AppSettings.Settings["serverAET"].Value;
+            Aet = config.AppSettings.Settings["aetName"].Value;
             Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
         }

@@ -1,0 +1,54 @@
+﻿<Window x:Class="MyPACSViewer.Components.QRConfigWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MyPACSViewer.Components"
+        mc:Ignorable="d"
+        Title="Configure Query/Retrieve" Height="480" Width="640">
+    <DockPanel Margin="15">
+        <DockPanel DockPanel.Dock="Top">
+            <TextBlock DockPanel.Dock="Left" Width="auto" Padding="0,5,0,5">Patient Name: </TextBlock>
+            <Button DockPanel.Dock="Right" Padding="15,5,15,5" Name="FindBtn" Click="FindBtn_Click">Find</Button>
+            <TextBox Margin="15,0,15,0" Name="PatientNameBox"></TextBox>
+        </DockPanel>
+
+        <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button Padding="15,5,15,5" Name="GetSelectedBtn" Click="GetSelectedBtn_Click">Get Selected</Button>
+            <Button Padding="15,5,15,5" Margin="20,0,20,0" Name="GetAllBtn" Click="GetAllBtn_Click">Get All</Button>
+            <Button Padding="15,5,15,5" Name="CancelBtn" Click="CancelBtn_Click">Cancel</Button>
+        </StackPanel>
+
+        <ListView Margin="0,10,0,10" Name="QRListView">
+            <ListView.View>
+                <GridView ColumnHeaderToolTip="Series Found">
+                    <GridViewColumn>
+                        <GridViewColumn.CellTemplate>
+                            <DataTemplate>
+                                <CheckBox IsChecked="{Binding IsSelected}"/>
+                            </DataTemplate>
+                        </GridViewColumn.CellTemplate>
+                    </GridViewColumn>
+                    <GridViewColumn DisplayMemberBinding="{Binding StudyUID}" Header="Study UID"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding SeriesUID}" Header="Series UID"/>
+                    <!--<GridViewColumn DisplayMemberBinding="{Binding SeriesCount}" Header="Num of Frames"/>-->
+
+                </GridView>
+                
+            </ListView.View>
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock FontWeight="Bold" FontSize="18" Text="{Binding StudyDescription}"/>
+                                <TextBlock FontWeight="Bold" FontSize="18" Text="{Binding SeriesCount}"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+        </ListView>
+        
+    </DockPanel>
+</Window>
