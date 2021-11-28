@@ -4,21 +4,23 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyPACSViewer"
-        xmlns:components="clr-namespace:MyPACSViewer.Components"
-        xmlns:data="clr-namespace:MyPACSViewer.DataItems"
+        xmlns:view="clr-namespace:MyPACSViewer.View"
+        xmlns:viewModel="clr-namespace:MyPACSViewer.ViewModel"
         mc:Ignorable="d"
-        Title="MyPACSViewer" Icon="/Resources/icon.ico" Height="720" Width="1280">
-   
+        Title="MyPACSViewer" Icon="/icon.ico" Height="720" Width="1280">
+    <Window.Resources>
+        <viewModel:ToolbarOpenFileViewModel x:Key="openFileViewModel" x:Name="openFileViewModel"/>
+    </Window.Resources>
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top" FontSize="14" Padding="5">
                 <MenuItem Header="File" >
-                    <MenuItem x:Name="OpenFileMenu" Header="Open File" Click="OpenFileMenu_Click"/>
-                    <MenuItem x:Name="OpenFolderMenu" Header="Open Folder" Click="OpenFolderMenu_Click"/>
-                    <MenuItem x:Name="QueryRetrieveMenu" Header="Query/Retrive" Click="QueryRetrieveMenu_Click"/>
+                    <MenuItem x:Name="OpenFileMenu" Header="Open File" DataContext="{StaticResource openFileViewModel}"  Command="{Binding ClickedCommand}"/>
+                    <MenuItem x:Name="OpenFolderMenu" Header="Open Folder" />
+                    <MenuItem x:Name="QueryRetrieveMenu" Header="Query/Retrive"/>
                     <Separator/>
-                    <MenuItem x:Name="ExportMenu" Header="Export" Click="ExportMenu_Click"/>
-                    <MenuItem x:Name="ExitMenu" Header="Exit" Click="ExitMenu_Click"/>
+                    <MenuItem x:Name="ExportMenu" Header="Export"/>
+                    <MenuItem x:Name="ExitMenu" Header="Exit"/>
                 </MenuItem>
 
                 <MenuItem Header="Image">
@@ -35,20 +37,21 @@
             </Menu>
 
             <ToolBar  DockPanel.Dock="Top">
-                <components:ToolbarButton x:Name="FlipHorizontalBtn" Click="FlipHorizontalBtn_Click" 
-                                        Source="../Resources/flip-horizontal.png" Text="Flip Horizontal"/>
+                <view:ToolbarButton DataContext="{StaticResource openFileViewModel}" Command="{Binding ClickedCommand}"
+                                    Source="{Binding Path=Source}" Text="{Binding Path=Text}"/>
+
                 <Separator/>
-                <components:ToolbarButton x:Name="FlipVerticalBtn" Click="FlipVerticalBtn_Click"
+                <!--<view:ToolbarButton x:Name="FlipVerticalBtn" Click="FlipVerticalBtn_Click"
                       Source="../Resources/flip-vertical.png" Text="Flip Vertical"/>
                 <Separator/>
-                <components:ToolbarButton x:Name="SplitMergeBtn" Click="SplitMergeBtn_Click" 
+                <view:ToolbarButton x:Name="SplitMergeBtn" Click="SplitMergeBtn_Click" 
                                         Source="../Resources/window-split.png" Text="3D View"/>
                 <Separator/>
-                <components:ToolbarButton x:Name="ResetFocusBtn" Click="ResetFocusBtn_Click"
+                <view:ToolbarButton x:Name="ResetFocusBtn" Click="ResetFocusBtn_Click"
                                           Source="../Resources/focus.png" Text="Reset Focus"/>
                 <Separator/>
-                <components:ToolbarButton x:Name="RevertBtn" Click="RevertBtn_Click" 
-                                        Source="../Resources/revert.png" Text="Revert All"/>
+                <view:ToolbarButton x:Name="RevertBtn" Click="RevertBtn_Click" 
+                                        Source="../Resources/revert.png" Text="Revert All"/>-->
             </ToolBar>
 
             <StatusBar x:Name="StatusBar" DockPanel.Dock="Bottom" Height="24">
@@ -57,7 +60,7 @@
                 </StatusBarItem>
             </StatusBar>
 
-            <DockPanel>
+            <!--<DockPanel>
                 <TreeView x:Name="FileExplorer" DockPanel.Dock="Left" Width="Auto" MinWidth="300" PreviewMouseDoubleClick="FileExplorer_PreviewMouseDoubleClick">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type data:FileNodeItem}" ItemsSource="{Binding Path=Children.Values}">
@@ -73,9 +76,8 @@
                 </TreeView>
 
                 <Grid>
-                    <components:Viewer2D x:Name="Viewer2D" Background="Blue"/>
-                    <components:Viewer3D x:Name="Viewer3D" Visibility="Hidden" Background="Green"/>
-
+                    <view:Viewer2D x:Name="Viewer2D" Background="Blue"/>
+                    <view:Viewer3D x:Name="Viewer3D" Visibility="Hidden" Background="Green"/>
 
                     <Canvas>
                         <TextBlock x:Name="LeftTopText" Canvas.Left="10" Canvas.Top="10"/>
@@ -84,7 +86,7 @@
                         <TextBlock x:Name="RightBottomText" Canvas.Right="10" Canvas.Top="10"/>
                     </Canvas>
                 </Grid>
-            </DockPanel>
+            </DockPanel>-->
 
         </DockPanel>
 

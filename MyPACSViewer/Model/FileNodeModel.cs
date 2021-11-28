@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using Dicom;
 
-namespace MyPACSViewer.DataItems
+namespace MyPACSViewer.Model
 {
-    internal class FileNodeItem
+    internal class FileNodeModel
     {
         public string DisplayName { get; set; }
         public string Icon { get; set; }
@@ -18,14 +18,14 @@ namespace MyPACSViewer.DataItems
         public static readonly string SeriesIcon = "/Resources/series.png";
         public static readonly string InstanceIcon = "/Resources/instance.png";
 
-        public Dictionary<string, FileNodeItem> Children { get; set; }
+        public Dictionary<string, FileNodeModel> Children { get; set; }
 
-        public FileNodeItem()
+        public FileNodeModel()
         {
             Children = new();
         }
 
-        public FileNodeItem(string name, string icon, string path = null)
+        public FileNodeModel(string name, string icon, string path = null)
         {
             DisplayName = name;
             Icon = icon;

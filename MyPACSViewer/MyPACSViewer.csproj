@@ -17,42 +17,77 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="Resources\direction-adjustment.svg" />
-    <None Remove="Resources\flip-horizontal.png" />
-    <None Remove="Resources\flip-vertical.png" />
-    <None Remove="Resources\focus.png" />
-    <None Remove="Resources\grid-four.svg" />
-    <None Remove="Resources\icon.ico" />
-    <None Remove="Resources\instance.png" />
-    <None Remove="Resources\MicroDicom.ico" />
-    <None Remove="Resources\patient.png" />
-    <None Remove="Resources\refresh.svg" />
-    <None Remove="Resources\revert.png" />
-    <None Remove="Resources\rotate.svg" />
-    <None Remove="Resources\rotation-horizontal.svg" />
-    <None Remove="Resources\rotation-vertical.svg" />
-    <None Remove="Resources\series.png" />
-    <None Remove="Resources\study.png" />
-    <None Remove="Resources\window-merge.png" />
-    <None Remove="Resources\window-split.png" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Resource Include="Resources\flip-horizontal.png" />
-    <Resource Include="Resources\flip-vertical.png" />
-    <Resource Include="Resources\focus.png" />
-    <Resource Include="Resources\icon.ico" />
-    <Resource Include="Resources\instance.png" />
-    <Resource Include="Resources\patient.png" />
-    <Resource Include="Resources\revert.png" />
-    <Resource Include="Resources\series.png" />
-    <Resource Include="Resources\study.png" />
-    <Resource Include="Resources\window-merge.png" />
-    <Resource Include="Resources\window-split.png" />
+    <None Remove="View\Assets\direction-adjustment.svg" />
+    <None Remove="View\Assets\file.png" />
+    <None Remove="View\Assets\flip-horizontal.png" />
+    <None Remove="View\Assets\flip-vertical.png" />
+    <None Remove="View\Assets\focus.png" />
+    <None Remove="View\Assets\folder.png" />
+    <None Remove="View\Assets\grid-four.svg" />
+    <None Remove="View\Assets\icon.ico" />
+    <None Remove="View\Assets\instance.png" />
+    <None Remove="View\Assets\MicroDicom.ico" />
+    <None Remove="View\Assets\patient.png" />
+    <None Remove="View\Assets\refresh.svg" />
+    <None Remove="View\Assets\revert.png" />
+    <None Remove="View\Assets\rotate.svg" />
+    <None Remove="View\Assets\rotation-horizontal.svg" />
+    <None Remove="View\Assets\rotation-vertical.svg" />
+    <None Remove="View\Assets\series.png" />
+    <None Remove="View\Assets\study.png" />
+    <None Remove="View\Assets\window-merge.png" />
+    <None Remove="View\Assets\window-split.png" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="fo-dicom.Desktop" Version="4.0.8" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="View\Assets\file.png" />
+    <Resource Include="View\Assets\flip-horizontal.png" />
+    <Resource Include="View\Assets\flip-vertical.png" />
+    <Resource Include="View\Assets\focus.png" />
+    <Resource Include="icon.ico" />
+    <Resource Include="View\Assets\folder.png" />
+    <Resource Include="View\Assets\instance.png" />
+    <Resource Include="View\Assets\patient.png" />
+    <Resource Include="View\Assets\revert.png" />
+    <Resource Include="View\Assets\series.png" />
+    <Resource Include="View\Assets\study.png" />
+    <Resource Include="View\Assets\window-merge.png" />
+    <Resource Include="View\Assets\window-split.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

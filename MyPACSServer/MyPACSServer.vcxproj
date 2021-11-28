@@ -122,7 +122,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>Iphlpapi.lib;ws2_32.lib;wsock32.lib;netapi32.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmdsig.lib;dcmnet.lib;dcmsr.lib;dcmimgle.lib;dcmqrdb.lib;dcmtls.lib;dcmwlm.lib;dcmpstat.lib;dcmjpls.lib;dcmjpeg.lib;dcmimage.lib;ijg8.lib;ijg12.lib;ijg16.lib;i2d.lib;zlib_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>mysqlcppconn8.lib;Iphlpapi.lib;ws2_32.lib;wsock32.lib;netapi32.lib;ofstd.lib;oflog.lib;dcmdata.lib;dcmdsig.lib;dcmnet.lib;dcmsr.lib;dcmimgle.lib;dcmqrdb.lib;dcmtls.lib;dcmwlm.lib;dcmpstat.lib;dcmjpls.lib;dcmjpeg.lib;dcmimage.lib;ijg8.lib;ijg12.lib;ijg16.lib;i2d.lib;zlib_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">

@@ -11,10 +11,10 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using MyPACSViewer.DataItems;
+using MyPACSViewer.Model;
 //using ViewerSCU;
 
-namespace MyPACSViewer.Components
+namespace MyPACSViewer.View
 {
     /// <summary>
     /// Interaction logic for QRConfigWindow.xaml
