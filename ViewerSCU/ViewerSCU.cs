@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
 using System.Configuration;
-using FellowOakDicom;
-using FellowOakDicom.Network;
-using FellowOakDicom.Network.Client;
+using Dicom;
+
+using Dicom.Network;
+using Client = Dicom.Network.Client;
 
 
 namespace ViewerSCU
@@ -19,11 +20,11 @@ namespace ViewerSCU
         public int Port { get; } = 104;
         public string ServerAET { get; } = "MyPACSServer";
         public string Aet { get; } = "ViewerSCU";
-        private readonly IDicomClient Client;
+        private readonly Client.IDicomClient Client;
 
         public ViewerSCU()
         {
-            Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
+            Client = new Client.DicomClient(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
         }
 
@@ -33,7 +34,7 @@ namespace ViewerSCU
             Port = port;
             ServerAET = serverAET;
             Aet = aet;
-            Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
+            Client = new Client.DicomClient(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
         }
 
@@ -46,7 +47,7 @@ namespace ViewerSCU
             Port = int.Parse(config.AppSettings.Settings["port"].Value);
             ServerAET = config.AppSettings.Settings["serverAET"].Value;
             Aet = config.AppSettings.Settings["aetName"].Value;
-            Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
+            Client = new Client.DicomClient(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
         }
 
