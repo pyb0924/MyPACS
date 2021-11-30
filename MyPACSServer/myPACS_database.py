@@ -2,7 +2,7 @@ import records
 from sqlalchemy.exc import ResourceClosedError
 
 
-class MyPACSDataBase(records.Database):
+class MyPACSdatabase(records.Database):
     def __init__(self, db_url=None, **kwargs):
         super().__init__(db_url, **kwargs)
 

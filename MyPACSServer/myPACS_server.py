@@ -9,6 +9,8 @@ from pydicom.dataset import Dataset
 from pynetdicom import AE, StoragePresentationContexts, evt
 from pynetdicom import sop_class
 
+from utils import get_db_connection
+
 
 class MyPACSServer(AE):
     def __init__(self, config_file):
@@ -35,10 +37,7 @@ class MyPACSServer(AE):
         ]
 
         # init database
-        config_db = config['database']
-        self.connect_str = f"mysql+pymysql://{config_db['username']}:{config_db['password']}" \
-                           f"@{config_db['host']}:{config_db['port']}/{config_db['name']}"
-        self.db = records.Database(self.connect_str)
+        self.db = get_db_connection(config['database'])
 
         # init logger
         logging.config.dictConfig(config['logger'])

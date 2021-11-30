@@ -4,23 +4,18 @@ from pathlib import Path
 from progress.bar import Bar
 import click
 
-from myPACS_database import MyPACSDataBase
-from utils import generate_record_dict
-
-data_root = r'E:\manifest-7qRRRBGo6029235898952856192\LungCT-Diagnosis'
+from myPACS_database import MyPACSdatabase
+from utils import generate_record_dict, data_root, config_root, get_db_connection
 
 
 @click.command()
 @click.option('--root', default=data_root, help='DICOM file root')
-@click.option('--config', default='./config.json', help='config file path')
+@click.option('--config', default=config_root, help='config file path')
 def main(root, config):
     with open(config, 'r') as file:
         db_config = json.load(file)['database']
 
-    connect_str = f"mysql+pymysql://{db_config['username']}:{db_config['password']}" \
-                  f"@{db_config['host']}:{db_config['port']}/{db_config['name']}"
-    db = MyPACSDataBase(connect_str)
-    print(db.get_connection())
+    db = get_db_connection(db_config)
 
     dicom_path_list = list(Path(root).rglob('*.dcm'))
 
