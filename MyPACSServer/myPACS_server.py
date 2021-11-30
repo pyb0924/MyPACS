@@ -45,7 +45,7 @@ class MyPACSServer(AE):
         self.logger = logging.getLogger('MyPACSLogger')
 
     def run(self):
-        self.logger.debug(f'Server running at port {self.port}, AET title: {self.ae_title}')
+        self.logger.debug(f'Server running at port {self.port}, AET title: {str(self.ae_title, encoding="utf-8")}')
         self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers)
 
     def handle_find_wrapper(self):

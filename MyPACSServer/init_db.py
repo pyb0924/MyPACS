@@ -1,5 +1,5 @@
 import json
-from myDB import MyDB
+from myPACS_database import MyPACSDataBase
 
 if __name__ == '__main__':
     with open('./config.json', 'r') as file:
@@ -7,7 +7,7 @@ if __name__ == '__main__':
 
     connect_str = f"mysql+pymysql://{db_config['username']}:{db_config['password']}" \
                   f"@{db_config['host']}:{db_config['port']}/{db_config['name']}"
-    db = MyDB(connect_str)
+    db = MyPACSDataBase(connect_str)
     print(db.get_connection())
 
     db.query_return_none('DROP TABLE IF EXISTS mypacs_test')

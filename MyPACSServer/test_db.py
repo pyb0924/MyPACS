@@ -4,7 +4,7 @@ from pathlib import Path
 from progress.bar import Bar
 import click
 
-from myDB import MyDB
+from myPACS_database import MyPACSDataBase
 from utils import generate_record_dict
 
 data_root = r'E:\manifest-7qRRRBGo6029235898952856192\LungCT-Diagnosis'
@@ -19,7 +19,7 @@ def main(root, config):
 
     connect_str = f"mysql+pymysql://{db_config['username']}:{db_config['password']}" \
                   f"@{db_config['host']}:{db_config['port']}/{db_config['name']}"
-    db = MyDB(connect_str)
+    db = MyPACSDataBase(connect_str)
     print(db.get_connection())
 
     dicom_path_list = list(Path(root).rglob('*.dcm'))
