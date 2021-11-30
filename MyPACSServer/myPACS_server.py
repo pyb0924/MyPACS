@@ -1,16 +1,13 @@
 import json
 import logging.config
-from pathlib import Path
-import os
-from functools import partialmethod, partial
-from pydicom import dcmread
-from pydicom.dataset import Dataset
-
-from pynetdicom import AE, StoragePresentationContexts, evt
-from pynetdicom import sop_class
-from pynetdicom.status import STATUS_PENDING
+from functools import partial
+import traceback
 
 import records
+from pydicom import dcmread
+from pydicom.dataset import Dataset
+from pynetdicom import AE, StoragePresentationContexts, evt
+from pynetdicom import sop_class
 
 
 class MyPACSServer(AE):
@@ -47,6 +44,10 @@ class MyPACSServer(AE):
         logging.config.dictConfig(config['logger'])
         self.logger = logging.getLogger('MyPACSLogger')
 
+    def run(self):
+        self.logger.debug(f'Server running at port {self.port}, AET title: {self.ae_title}')
+        self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers)
+
     def handle_find_wrapper(self):
         return partial(self.handle_find, server=self)
 
@@ -55,9 +56,7 @@ class MyPACSServer(AE):
 
     @staticmethod
     def handle_find(event, server):
-        """
-        Handle C-Find by PatientName
-        """
+        """ Handle C-Find request by PatientName"""
 
         req_dataset = event.identifier
 
@@ -66,72 +65,59 @@ class MyPACSServer(AE):
             yield 0xC000, None
             return
 
-        # Import stored SOP Instances
-        instances = []
-        if req_dataset.PatientName not in ['*', '', '?']:
-            rows = server.db.query('./sql/select_by_patient_name.sql', fetchall=True,
-                                   patient_name=req_dataset.PatientName)
-        else:
+        if req_dataset.PatientName in ['*', '', '?']:
             server.logger.error("Invalid PatientName")
-            yield 0xC000,None
+            yield 0xC000, None
             return
 
-        rows_dict_list = rows.as_dict()
+        try:
+            find_rows = server.db.query_file('./sql/select_by_patient_name.sql', fetchall=True,
+                                             patient_name=req_dataset.PatientName)
+        except Exception:
+            server.logger.exception(f"Exception occured:{traceback.format_exc()}")
+        else:
+            rows_dict_list = find_rows.as_dict()
 
-        for row in rows_dict_list:
-            # Check if C-CANCEL has been received
-            if event.is_cancelled:
-                yield 0xFE00, None
-                return
+            for row in rows_dict_list:
+                # Check if C-CANCEL has been received
+                if event.is_cancelled:
+                    yield 0xFE00, None
+                    return
 
-            res_dataset = Dataset()
-            res_dataset.PatientName = row['patient_name']
-            res_dataset.StudyInstanceUID = row['study_instance_uid']
-            res_dataset.SeriesDescription = row['series_description']
-            res_dataset.SeriesInstanceUID = row['series_instance_uid']
+                res_dataset = Dataset()
+                res_dataset.PatientName = row['patient_name']
+                res_dataset.StudyInstanceUID = row['study_instance_uid']
+                res_dataset.SeriesDescription = row['series_description']
+                res_dataset.SeriesInstanceUID = row['series_instance_uid']
 
-            # Pending
-            yield 0xFF00, res_dataset
+                # Pending
+                yield 0xFF00, res_dataset
 
     @staticmethod
     def handle_get(event, server):
-        """Handle a C-GET request event."""
+        """Handle C-GET request by StudyInstanceUID & SeriesInstanceUID."""
+        # TODO add supprt for image processing
         req_dataset = event.identifier
-        if 'QueryRetrieveLevel' not in req_dataset:
-            # Failure
-            yield 0xC000, None
-            return
+        try:
+            get_rows = server.db.query_file('./sql/select_by_id.sql', fetchall=True,
+                                            study_instance_uid=req_dataset.StudyInstanceUID,
+                                            series_instance_uid=req_dataset.SeriesInstanceUID)
+        except Exception:
+            server.logger.exception(f"Exception occured:{traceback.format_exc()}")
+        else:
+            rows_dict_list = get_rows.as_dict()
 
-        # Import stored SOP Instances
-        instances = []
-        matching = []
-        fdir = '/path/to/directory'
-        for fpath in os.listdir(fdir):
-            instances.append(dcmread(os.path.join(fdir, fpath)))
+            # Yield the total number of C-STORE sub-operations required
+            yield len(rows_dict_list)
 
-        if req_dataset.QueryRetrieveLevel == 'PATIENT':
-            if 'PatientID' in req_dataset:
-                matching = [
-                    inst for inst in instances if inst.PatientID == req_dataset.PatientID
-                ]
+            # Yield the matching instances
+            for row in rows_dict_list:
+                # Check if C-CANCEL has been received
+                if event.is_cancelled:
+                    yield 0xFE00, None
+                    return
 
-            # Skip the other possible attributes...
+                res_dataset = dcmread(row['local_file_path'])
 
-        # Skip the other QR levels...
-
-        # Yield the total number of C-STORE sub-operations required
-        yield len(instances)
-
-        # Yield the matching instances
-        for instance in matching:
-            # Check if C-CANCEL has been received
-            if event.is_cancelled:
-                yield 0xFE00, None
-                return
-
-            # Pending
-            yield 0xFF00, instance
-
-    def run(self):
-        self.logger.debug(f'Server running at port {self.port}')
-        self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers)
+                # Pending
+                yield 0xFF00, res_dataset
