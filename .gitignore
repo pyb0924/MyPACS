@@ -3,7 +3,7 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 # User-specific files
-*.ini
+*config.json
 *.rsuser
 *.suo
 *.user
@@ -78,7 +78,7 @@ StyleCopReport.xml
 *.tmp
 *.tmp_proj
 *_wpftmp.csproj
-*.log
+*.log*
 *.vspscc
 *.vssscc
 .builds

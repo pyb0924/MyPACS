@@ -1,0 +1,3 @@
+SELECT patient_name,study_instance_uid,series_description,series_instance_uid
+FROM mypacs_test
+WHERE patient_name = :patient_name
