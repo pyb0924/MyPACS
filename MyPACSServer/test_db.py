@@ -5,11 +5,11 @@ from progress.bar import Bar
 import click
 
 from myPACS_database import MyPACSdatabase
-from utils import generate_record_dict, data_root, config_root, get_db_connection
+from utils import generate_record_dict, config_root, get_db_connection
 
 
 @click.command()
-@click.option('--root', default=data_root, help='DICOM file root')
+@click.option('--root', help='DICOM file root')
 @click.option('--config', default=config_root, help='config file path')
 def main(root, config):
     with open(config, 'r') as file:

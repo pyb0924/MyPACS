@@ -1,0 +1,48 @@
+{
+  "scp": {
+    "port": 104,
+    "ae_title": "MyPACSServer"
+  },
+  "database": {
+    "host": "localhost",
+    "port": "3306",
+    "name": "mypacs",
+    "username": "username",
+    "password": "password"
+  },
+  "logger": {
+    "version": 1,
+    "formatters": {
+      "simple": {
+        "datefmt": "%Y-%m-%d %H:%M:%S",
+        "format": "[%(levelname)s] %(asctime)s - %(filename)s Line %(lineno)d : %(message)s"
+      }
+    },
+    "handlers": {
+      "console": {
+        "class": "logging.StreamHandler",
+        "level": "DEBUG",
+        "formatter": "simple"
+      },
+      "file": {
+        "class": "logging.handlers.RotatingFileHandler",
+        "encoding": "utf-8",
+        "mode":"w",
+        "maxBytes": 10000,
+        "backupCount": 3,
+        "filename": "MyPACSServer.log",
+        "level": "DEBUG",
+        "formatter": "simple"
+      }
+    },
+    "loggers": {
+      "MyPACSLogger": {
+        "handlers": [
+          "console",
+          "file"
+        ],
+        "level": "DEBUG"
+      }
+    }
+  }
+}

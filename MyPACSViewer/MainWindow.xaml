@@ -60,7 +60,7 @@
                 </StatusBarItem>
             </StatusBar>
 
-            <!--<DockPanel>
+            <DockPanel>
                 <TreeView x:Name="FileExplorer" DockPanel.Dock="Left" Width="Auto" MinWidth="300" PreviewMouseDoubleClick="FileExplorer_PreviewMouseDoubleClick">
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate DataType="{x:Type data:FileNodeItem}" ItemsSource="{Binding Path=Children.Values}">
@@ -86,7 +86,7 @@
                         <TextBlock x:Name="RightBottomText" Canvas.Right="10" Canvas.Top="10"/>
                     </Canvas>
                 </Grid>
-            </DockPanel>-->
+            </DockPanel>
 
         </DockPanel>
 

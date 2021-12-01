@@ -1,0 +1,7 @@
+click==8.0.3
+progress==1.6
+pydicom==2.2.2
+pynetdicom==1.5.7
+records==0.5.3
+SQLAlchemy==1.4.27
+pymysql==1.0.2
