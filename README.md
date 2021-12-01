@@ -12,7 +12,8 @@
   - PyTorch
 - Database
   - MySQL 8.0
-  - 
+
+
 
 ## Overview
 
