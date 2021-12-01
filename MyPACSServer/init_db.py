@@ -1,6 +1,6 @@
 import json
 
-from myPACS_database import MyPACSdatabase
+from database import MyPACSdatabase
 from utils import config_root,get_db_connection
 
 if __name__ == '__main__':

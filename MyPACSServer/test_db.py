@@ -4,7 +4,7 @@ from pathlib import Path
 from progress.bar import Bar
 import click
 
-from myPACS_database import MyPACSdatabase
+from database import MyPACSdatabase
 from utils import generate_record_dict, config_root, get_db_connection
 
 

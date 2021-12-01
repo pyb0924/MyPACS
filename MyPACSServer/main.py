@@ -1,4 +1,4 @@
-from myPACS_server import MyPACSServer
+from server import MyPACSServer
 from utils import config_root
 
 if __name__ == '__main__':
