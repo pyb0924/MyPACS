@@ -3,8 +3,10 @@ from sqlalchemy.exc import ResourceClosedError
 
 
 class MyPACSdatabase(records.Database):
-    def __init__(self, db_url=None, **kwargs):
-        super().__init__(db_url, **kwargs)
+    def __init__(self, db_config):
+        connect_str = f"mysql+pymysql://{db_config['username']}:{db_config['password']}" \
+                      f"@{db_config['host']}:{db_config['port']}/{db_config['name']}"
+        super().__init__(connect_str)
 
     def query_return_none(self, query: str, **kwargs):
         try:

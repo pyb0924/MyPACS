@@ -1,15 +1,13 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <UseWPF>true</UseWPF>
-    <ApplicationIcon />
     <OutputType>Exe</OutputType>
-    <StartupObject>ViewerSCU.TestViewerSCU</StartupObject>
+    <TargetFramework>net5.0</TargetFramework>
+    <StartupObject>ViewerSCU.Program</StartupObject>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="fo-dicom.Desktop" Version="4.0.8" />
+    <PackageReference Include="fo-dicom" Version="5.0.1" />
   </ItemGroup>
 
 </Project>
