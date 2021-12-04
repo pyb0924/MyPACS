@@ -25,7 +25,7 @@
 
 ### Structure
 
-![MyPACS.drawio](./images/MyPACS.png)
+![MyPACS.drawio](images/MyPACS.png)
 
 - [StudySCU](./studySCU)：一个DICOM C-STORE SCU，用于模拟产生图像的检查设备端。
 - [MyPACSViewer](./MyPACSViewer)：一个集成了ViewerSCU（一个DICOM Q-R SCU）的前端UI界面，模拟的是客户端。
@@ -54,11 +54,11 @@
 
 - DICOM协议使用fo-dicom库。
 
-  ![image-20211119112618344](./images/ui.png)
+  ![image-20211119112618344](images/ui.png)
 
 - 使用MVVM设计模式（Model-View-ViewModel）
 
-  <img src="./images/mvvm.png" alt="img" style="zoom: 150%;" />
+  <img src="images/mvvm.png" alt="img" style="zoom: 150%;" />
 
 ### [MyPACSServer](./MyPACSServer)
 
