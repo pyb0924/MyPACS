@@ -25,6 +25,13 @@ namespace ViewerSCU
         {
             Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
+
+            var pcs = DicomPresentationContext.GetScpRolePresentationContextsFromStorageUids(
+                DicomStorageCategory.Image,
+                DicomTransferSyntax.ExplicitVRLittleEndian,
+                DicomTransferSyntax.ImplicitVRLittleEndian,
+                DicomTransferSyntax.ImplicitVRBigEndian);
+            Client.AdditionalPresentationContexts.AddRange(pcs);
         }
 
         public ViewerSCU(string host, int port, string serverAET, string aet)
@@ -35,6 +42,13 @@ namespace ViewerSCU
             Aet = aet;
             Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
+
+            var pcs = DicomPresentationContext.GetScpRolePresentationContextsFromStorageUids(
+                DicomStorageCategory.Image,
+                DicomTransferSyntax.ExplicitVRLittleEndian,
+                DicomTransferSyntax.ImplicitVRLittleEndian,
+                DicomTransferSyntax.ImplicitVRBigEndian);
+            Client.AdditionalPresentationContexts.AddRange(pcs);
         }
 
         public async Task<List<DicomDataset>> RunCFind(string patient, bool use_id = false)
@@ -61,14 +75,6 @@ namespace ViewerSCU
                 SaveImage(req.Dataset);
                 return Task.FromResult(new DicomCStoreResponse(req, DicomStatus.Success));
             };
-
-            var pcs = DicomPresentationContext.GetScpRolePresentationContextsFromStorageUids(
-                DicomStorageCategory.Image,
-                DicomTransferSyntax.ExplicitVRLittleEndian,
-                DicomTransferSyntax.ImplicitVRLittleEndian,
-                DicomTransferSyntax.ImplicitVRBigEndian);
-            Client.AdditionalPresentationContexts.AddRange(pcs);
-
             await Client.AddRequestAsync(request);
             await Client.SendAsync();
         }
@@ -123,11 +129,18 @@ namespace ViewerSCU
         private static void SaveImage(DicomDataset dataset)
         {
             var studyUID = dataset.GetSingleValue<string>(DicomTag.StudyInstanceUID).Trim();
+            var seriesUID = dataset.GetSingleValue<string>(DicomTag.SeriesInstanceUID).Trim();
             var sopUID = dataset.GetSingleValue<string>(DicomTag.SOPInstanceUID).Trim();
             var path = Path.GetFullPath(_StoragePath);
-            path = Path.Combine(path, studyUID);
 
-            if (Directory.Exists(path))
+            path = Path.Combine(path, studyUID);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+            path = Path.Combine(path, seriesUID);
+
+            if (!Directory.Exists(path))
             {
                 Directory.CreateDirectory(path);
             }

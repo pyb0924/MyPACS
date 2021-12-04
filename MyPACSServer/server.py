@@ -2,6 +2,7 @@ import json
 import logging.config
 from functools import partial
 import traceback
+import time
 
 from pydicom import dcmread
 from pydicom.dataset import Dataset
@@ -109,15 +110,17 @@ class MyPACSServer(AE):
             res_dataset.SeriesDescription = row['series_description']
             res_dataset.SeriesInstanceUID = row['series_instance_uid']
 
+            server.logger.debug(f'Running C-Find: StudyInstanceUID={row["study_instance_uid"]} '
+                                f'SeriesInstanceUID={row["series_instance_uid"]}')
+
             # Pending
             yield 0xFF00, res_dataset
 
     @staticmethod
     def handle_get(event, server):
         """Handle C-GET request by StudyInstanceUID & SeriesInstanceUID."""
-
         server.logger.debug(f'Begin C-GET')
-        # TODO add supprt for image processing
+
         req_dataset = event.identifier
 
         rows_dict_list = [{}]
@@ -126,6 +129,7 @@ class MyPACSServer(AE):
             server.logger.error('C-GET: Invalid request')
             yield 0xAA04, None
             return
+
         try:
             get_rows = server.db.query_file('./sql/select_by_id.sql', fetchall=True,
                                             study_instance_uid=req_dataset.StudyInstanceUID,
@@ -143,11 +147,11 @@ class MyPACSServer(AE):
         for row in rows_dict_list:
             # Check if C-CANCEL has been received
             if event.is_cancelled:
-                server.logger.debug(f'C-GET success. Retrieved {len(rows_dict_list)} DICOM instances')
                 yield 0xFE00, None
                 return
 
-            res_dataset = dcmread(row['local_file_path'])
-
+            res_dataset = dcmread(row['file_path'])
+            server.logger.debug(f'running C-GET from {row["file_path"]}')
+            # TODO image processing
             # Pending
             yield 0xFF00, res_dataset
