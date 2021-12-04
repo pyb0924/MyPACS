@@ -13,7 +13,6 @@ namespace MyPACSViewer.ViewModel
 {
     class ToolbarOpenFileViewModel : ToolbarViewModel
     {
-
         public string DicomRootPath { get; set; }
         public ToolbarOpenFileViewModel()
         {

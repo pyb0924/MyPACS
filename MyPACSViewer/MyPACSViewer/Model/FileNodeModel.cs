@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,19 +19,17 @@ namespace MyPACSViewer.Model
         public static readonly string SeriesIcon = "/Resources/series.png";
         public static readonly string InstanceIcon = "/Resources/instance.png";
 
-        public Dictionary<string, FileNodeModel> Children { get; set; }
-
-        public FileNodeModel()
-        {
-            Children = new();
-        }
+        public ObservableCollection<FileNodeModel> Children { get; set; } = new();
+        public bool IsExpanded { get; set; }
+        public bool IsSelected { get; set; }
 
         public FileNodeModel(string name, string icon, string path = null)
         {
             DisplayName = name;
             Icon = icon;
             Path = path;
-            Children = new();
         }
+
+
     }
 }

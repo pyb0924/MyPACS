@@ -5,11 +5,11 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MyPACSViewer"
         xmlns:view="clr-namespace:MyPACSViewer.View"
-        xmlns:viewModel="clr-namespace:MyPACSViewer.ViewModel"
+        xmlns:vm="clr-namespace:MyPACSViewer.ViewModel"
         mc:Ignorable="d"
         Title="MyPACSViewer" Icon="/icon.ico" Height="720" Width="1280">
     <Window.Resources>
-        <viewModel:ToolbarOpenFileViewModel x:Key="openFileViewModel" x:Name="openFileViewModel"/>
+        <vm:ToolbarOpenFileViewModel x:Key="openFileViewModel" x:Name="openFileViewModel"/>
     </Window.Resources>
     <Grid>
         <DockPanel>
@@ -61,30 +61,10 @@
             </StatusBar>
 
             <DockPanel>
-                <TreeView x:Name="FileExplorer" DockPanel.Dock="Left" Width="Auto" MinWidth="300" PreviewMouseDoubleClick="FileExplorer_PreviewMouseDoubleClick">
-                    <TreeView.ItemTemplate>
-                        <HierarchicalDataTemplate DataType="{x:Type data:FileNodeItem}" ItemsSource="{Binding Path=Children.Values}">
-                            <StackPanel Orientation="Horizontal" Margin="2">
-                                <Image Source="{Binding Icon}" Height="15" Margin="0,0,5,0"/>
-                                <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}"></TextBlock>
-                                <StackPanel.ToolTip>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" TextWrapping="Wrap" MaxWidth="200"></TextBlock>
-                                </StackPanel.ToolTip>
-                            </StackPanel>
-                        </HierarchicalDataTemplate>
-                    </TreeView.ItemTemplate>
-                </TreeView>
+                <view:FileExplorer DockPanel.Dock="Left" MinWidth="300"/>
 
                 <Grid>
-                    <view:Viewer2D x:Name="Viewer2D" Background="Blue"/>
-                    <view:Viewer3D x:Name="Viewer3D" Visibility="Hidden" Background="Green"/>
-
-                    <Canvas>
-                        <TextBlock x:Name="LeftTopText" Canvas.Left="10" Canvas.Top="10"/>
-                        <TextBlock x:Name="LeftBottomText" Canvas.Left="10" Canvas.Bottom="10"/>
-                        <TextBlock x:Name="RightTopText" Canvas.Right="10" Canvas.Top="10"/>
-                        <TextBlock x:Name="RightBottomText" Canvas.Right="10" Canvas.Top="10"/>
-                    </Canvas>
+                    <view:Viewer2D x:Name="Viewer2D"/>
                 </Grid>
             </DockPanel>
 

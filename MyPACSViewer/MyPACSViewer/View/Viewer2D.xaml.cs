@@ -10,17 +10,16 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace MyPACSViewer.View
 {
     /// <summary>
-    /// Interaction logic for Viewer3D.xaml
+    /// Interaction logic for Viewer2D.xaml
     /// </summary>
-    public partial class Viewer3D : Grid
+    public partial class Viewer2D : DockPanel
     {
-        public Viewer3D()
+        public Viewer2D()
         {
             InitializeComponent();
         }

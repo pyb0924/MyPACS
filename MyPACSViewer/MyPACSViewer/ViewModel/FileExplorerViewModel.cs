@@ -11,21 +11,8 @@ namespace MyPACSViewer.ViewModel
 {
     class FileExplorerViewModel:ViewModelBase
     {
-        private string _dicomRootPath;
         public ObservableCollection<DicomIndexModel> ChildList { get; set; } = new();
 
-        public string DicomRootPath
-        {
-            get => _dicomRootPath;
-            set
-            {
-                if(_dicomRootPath!=value)
-                {
-                    _dicomRootPath = value;
-                    RaisePropertyChanged(nameof(DicomRootPath));
-
-                }
-            }
-        }
+        
     }
 }
