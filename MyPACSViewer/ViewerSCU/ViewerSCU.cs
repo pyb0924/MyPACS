@@ -12,7 +12,7 @@ namespace ViewerSCU
 {
     public class ViewerSCU
     {
-        private const string _StoragePath = @".\DICOM";
+        private string StoragePath { get; }
         private static readonly string _Encoding = "IOS_IR 100";
 
         public string Host { get; } = "localhost";
@@ -34,12 +34,13 @@ namespace ViewerSCU
             Client.AdditionalPresentationContexts.AddRange(pcs);
         }
 
-        public ViewerSCU(string host, int port, string serverAET, string aet)
+        public ViewerSCU(string host, int port, string serverAET, string aet,string storagePath)
         {
             Host = host;
             Port = port;
             ServerAET = serverAET;
             Aet = aet;
+            StoragePath = storagePath;
             Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
 
@@ -126,12 +127,12 @@ namespace ViewerSCU
             }
         }
 
-        private static void SaveImage(DicomDataset dataset)
+        private void SaveImage(DicomDataset dataset)
         {
             var studyUID = dataset.GetSingleValue<string>(DicomTag.StudyInstanceUID).Trim();
             var seriesUID = dataset.GetSingleValue<string>(DicomTag.SeriesInstanceUID).Trim();
             var sopUID = dataset.GetSingleValue<string>(DicomTag.SOPInstanceUID).Trim();
-            var path = Path.GetFullPath(_StoragePath);
+            var path = Path.GetFullPath(StoragePath);
 
             path = Path.Combine(path, studyUID);
             if (!Directory.Exists(path))

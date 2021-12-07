@@ -27,6 +27,7 @@
     <None Remove="View\Assets\icon.ico" />
     <None Remove="View\Assets\instance.png" />
     <None Remove="View\Assets\MicroDicom.ico" />
+    <None Remove="View\Assets\net.png" />
     <None Remove="View\Assets\patient.png" />
     <None Remove="View\Assets\refresh.svg" />
     <None Remove="View\Assets\revert.png" />
@@ -40,7 +41,18 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="fo-dicom.Desktop" Version="4.0.8" />
+    <None Include="..\.editorconfig" Link=".editorconfig" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CommonServiceLocator" Version="2.0.6" />
+    <PackageReference Include="fo-dicom" Version="5.0.1" />
+    <PackageReference Include="MvvmLight" Version="5.4.1.1" />
+    <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ViewerSCU\ViewerSCU.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -51,6 +63,7 @@
     <Resource Include="icon.ico" />
     <Resource Include="View\Assets\folder.png" />
     <Resource Include="View\Assets\instance.png" />
+    <Resource Include="View\Assets\net.png" />
     <Resource Include="View\Assets\patient.png" />
     <Resource Include="View\Assets\revert.png" />
     <Resource Include="View\Assets\series.png" />

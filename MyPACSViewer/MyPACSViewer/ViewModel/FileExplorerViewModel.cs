@@ -1,18 +1,25 @@
-﻿using System;
+﻿using MyPACSViewer.Model;
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Resources;
-using System.Collections.ObjectModel;
-using MyPACSViewer.Model;
+using GalaSoft.MvvmLight;
 
 namespace MyPACSViewer.ViewModel
 {
-    class FileExplorerViewModel:ViewModelBase
+    class FileExplorerViewModel : ViewModelBase
     {
-        public ObservableCollection<DicomIndexModel> ChildList { get; set; } = new();
-
-        
+        private ObservableCollection<FileNodeModel> _fileTreeDataList;
+        public ObservableCollection<FileNodeModel> FileTreeDataList
+        {
+            get => _fileTreeDataList;
+            set
+            {
+                _fileTreeDataList = value;
+                RaisePropertyChanged(() => FileTreeDataList);
+            }
+        }
     }
 }

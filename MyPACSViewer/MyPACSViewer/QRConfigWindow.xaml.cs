@@ -10,19 +10,26 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
+using MyPACSViewer.Model;
+//using ViewerSCU;
 
-namespace MyPACSViewer.View
+namespace MyPACSViewer
 {
     /// <summary>
-    /// Interaction logic for FileExplorer.xaml
+    /// Interaction logic for QRConfigWindow.xaml
     /// </summary>
-    public partial class FileExplorer : ScrollViewer
+    public partial class QRConfigWindow : Window
     {
-        public FileExplorer()
+        public QRConfigWindow()
         {
             InitializeComponent();
+        }
+
+        private void CancelBtn_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+
         }
     }
 }

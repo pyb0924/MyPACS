@@ -6,21 +6,25 @@
         xmlns:local="clr-namespace:MyPACSViewer"
         xmlns:view="clr-namespace:MyPACSViewer.View"
         xmlns:vm="clr-namespace:MyPACSViewer.ViewModel"
+        xmlns:model="clr-namespace:MyPACSViewer.Model"
         mc:Ignorable="d"
         Title="MyPACSViewer" Icon="/icon.ico" Height="720" Width="1280">
     <Window.Resources>
-        <vm:ToolbarOpenFileViewModel x:Key="openFileViewModel" x:Name="openFileViewModel"/>
+        <vm:OpenFileViewModel x:Key="OpenFileVM"/>
+        <vm:OpenFolderViewModel x:Key="OpenFolderVM"/>
+        <vm:OpenQRViewModel x:Key="OpenQRVM"/>
+        <vm:FileExplorerViewModel x:Key="FileExplorerVM"/>
     </Window.Resources>
     <Grid>
         <DockPanel>
             <Menu DockPanel.Dock="Top" FontSize="14" Padding="5">
                 <MenuItem Header="File" >
-                    <MenuItem x:Name="OpenFileMenu" Header="Open File" DataContext="{StaticResource openFileViewModel}"  Command="{Binding ClickedCommand}"/>
-                    <MenuItem x:Name="OpenFolderMenu" Header="Open Folder" />
-                    <MenuItem x:Name="QueryRetrieveMenu" Header="Query/Retrive"/>
+                    <MenuItem Header="Open File" DataContext="{StaticResource OpenFileVM}"  Command="{Binding OpenFileCommand}"/>
+                    <MenuItem Header="Open Folder" DataContext="{StaticResource OpenFolderVM}" Command="{Binding OpenFolderCommand}" />
+                    <MenuItem Header="Query/Retrive" DataContext="{StaticResource OpenQRVM}" Command ="{Binding OpenQRWindowCommand}"/>
                     <Separator/>
-                    <MenuItem x:Name="ExportMenu" Header="Export"/>
-                    <MenuItem x:Name="ExitMenu" Header="Exit"/>
+                    <MenuItem Header="Export"/>
+                    <MenuItem Header="Exit"/>
                 </MenuItem>
 
                 <MenuItem Header="Image">
@@ -37,21 +41,15 @@
             </Menu>
 
             <ToolBar  DockPanel.Dock="Top">
-                <view:ToolbarButton DataContext="{StaticResource openFileViewModel}" Command="{Binding ClickedCommand}"
-                                    Source="{Binding Path=Source}" Text="{Binding Path=Text}"/>
+                <view:ToolbarButton DataContext="{StaticResource OpenFileVM}" Command="{Binding OpenFileCommand}"
+                                    Source="{Binding Source}" Text="{Binding Text}"/>
+                <Separator/>
+                <view:ToolbarButton DataContext="{StaticResource OpenFolderVM}" Command="{Binding OpenFolderCommand}"
+                                    Source="{Binding Source}" Text="{Binding Text}"/>
+                <Separator/>
+                <view:ToolbarButton DataContext="{StaticResource OpenQRVM}" Command="{Binding OpenQRWindowCommand}"
+                                    Source="{Binding Source}" Text="{Binding Text}"/>
 
-                <Separator/>
-                <!--<view:ToolbarButton x:Name="FlipVerticalBtn" Click="FlipVerticalBtn_Click"
-                      Source="../Resources/flip-vertical.png" Text="Flip Vertical"/>
-                <Separator/>
-                <view:ToolbarButton x:Name="SplitMergeBtn" Click="SplitMergeBtn_Click" 
-                                        Source="../Resources/window-split.png" Text="3D View"/>
-                <Separator/>
-                <view:ToolbarButton x:Name="ResetFocusBtn" Click="ResetFocusBtn_Click"
-                                          Source="../Resources/focus.png" Text="Reset Focus"/>
-                <Separator/>
-                <view:ToolbarButton x:Name="RevertBtn" Click="RevertBtn_Click" 
-                                        Source="../Resources/revert.png" Text="Revert All"/>-->
             </ToolBar>
 
             <StatusBar x:Name="StatusBar" DockPanel.Dock="Bottom" Height="24">
@@ -61,7 +59,29 @@
             </StatusBar>
 
             <DockPanel>
-                <view:FileExplorer DockPanel.Dock="Left" MinWidth="300"/>
+                <ScrollViewer DockPanel.Dock="Left" MinWidth="300">
+                    <TreeView x:Name="treeView" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,-10,0,0"
+                            DataContext="{StaticResource FileExplorerVM}" ItemsSource="{Binding FileTreeDataList}" BorderThickness="0" >
+                        <TreeView.ItemContainerStyle>
+                            <Style TargetType="{x:Type TreeViewItem}">
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                                <Setter Property="FontWeight" Value="Normal" />
+                                <Style.Triggers>
+                                    <Trigger Property="IsSelected" Value="True">
+                                        <Setter Property="FontWeight" Value="Bold" />
+                                    </Trigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TreeView.ItemContainerStyle>
+
+                        <TreeView.ItemTemplate>
+                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
+                                <TextBlock x:Name="treeViewItemTB" Text="{Binding itemName}" Tag="{Binding itemId}"/>
+                            </HierarchicalDataTemplate>
+                        </TreeView.ItemTemplate>
+                    </TreeView>
+                </ScrollViewer>
 
                 <Grid>
                     <view:Viewer2D x:Name="Viewer2D"/>

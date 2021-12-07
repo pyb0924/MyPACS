@@ -121,6 +121,15 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assets/net.png.
+        /// </summary>
+        internal static string netIcon {
+            get {
+                return ResourceManager.GetString("netIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assets/file.png.
         /// </summary>
         internal static string openFileIcon {
@@ -135,6 +144,15 @@ namespace MyPACSViewer.Properties {
         internal static string openFileStr {
             get {
                 return ResourceManager.GetString("openFileStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets/folder.png.
+        /// </summary>
+        internal static string openFolderIcon {
+            get {
+                return ResourceManager.GetString("openFolderIcon", resourceCulture);
             }
         }
         
@@ -154,6 +172,33 @@ namespace MyPACSViewer.Properties {
             get {
                 object obj = ResourceManager.GetObject("patient", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patient ID.
+        /// </summary>
+        internal static string patientIDStr {
+            get {
+                return ResourceManager.GetString("patientIDStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Patient Name.
+        /// </summary>
+        internal static string patientNameStr {
+            get {
+                return ResourceManager.GetString("patientNameStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Query/Retrieve.
+        /// </summary>
+        internal static string QRStr {
+            get {
+                return ResourceManager.GetString("QRStr", resourceCulture);
             }
         }
         

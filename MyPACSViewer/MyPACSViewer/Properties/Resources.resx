@@ -136,17 +136,32 @@
   <data name="instance" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\instance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="netIcon" xml:space="preserve">
+    <value>Assets/net.png</value>
+  </data>
   <data name="openFileIcon" xml:space="preserve">
     <value>Assets/file.png</value>
   </data>
   <data name="openFileStr" xml:space="preserve">
     <value>Open File</value>
   </data>
+  <data name="openFolderIcon" xml:space="preserve">
+    <value>Assets/folder.png</value>
+  </data>
   <data name="openFolderStr" xml:space="preserve">
     <value>Open Folder</value>
   </data>
   <data name="patient" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\patient.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="patientIDStr" xml:space="preserve">
+    <value>Patient ID</value>
+  </data>
+  <data name="patientNameStr" xml:space="preserve">
+    <value>Patient Name</value>
+  </data>
+  <data name="QRStr" xml:space="preserve">
+    <value>Query/Retrieve</value>
   </data>
   <data name="revert" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\revert.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

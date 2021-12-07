@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using MyPACSViewer.Model;
-
+using GalaSoft.MvvmLight;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -32,7 +32,7 @@ namespace MyPACSViewer.ViewModel
                 if (ToolbarModel.Source != value)
                 {
                     ToolbarModel.Source = value;
-                    RaisePropertyChanged(nameof(Source));
+                    RaisePropertyChanged(() => Source);
                 }
             }
         }
@@ -45,7 +45,7 @@ namespace MyPACSViewer.ViewModel
                 if (ToolbarModel.Text != value)
                 {
                     ToolbarModel.Text = value;
-                    RaisePropertyChanged(nameof(Text));
+                    RaisePropertyChanged(() => Text);
                 }
             }
         }
