@@ -14,7 +14,7 @@ namespace MyPACSViewer.ViewModel
 {
     class FileExplorerViewModel : ViewModelBase
     {
-        private Dictionary<string, FileNodeModel> _DicomDict;
+        private Dictionary<string, FileNodeModel> _DicomDict = new();
         private ObservableCollection<FileNodeModel> _fileTreeDataList;
         public ObservableCollection<FileNodeModel> FileTreeDataList
         {
@@ -100,7 +100,7 @@ namespace MyPACSViewer.ViewModel
 
         private async void GenerateFromFile(string file)
         {
-            _DicomDict = new();
+            _DicomDict.Clear();
             FileInfo fileInfo = new(file);
             if (await AddToDicomDict(fileInfo, true))
             {
@@ -115,7 +115,7 @@ namespace MyPACSViewer.ViewModel
 
         private async void GenerateFromFolder(string folder)
         {
-            _DicomDict = new();
+            _DicomDict.Clear();
             DirectoryInfo dir = new(folder);
             FileInfo[] files = dir.GetFiles("*.dcm", SearchOption.AllDirectories);
             int fileCount = 0;

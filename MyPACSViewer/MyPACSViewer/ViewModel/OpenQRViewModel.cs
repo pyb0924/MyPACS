@@ -11,7 +11,7 @@ namespace MyPACSViewer.ViewModel
 {
     class OpenQRViewModel : ToolbarViewModel
     {
-        private QRConfigWindow qrConfigWindow;
+        private QRWindow qrConfigWindow;
         public OpenQRViewModel()
         {
             Source = Properties.Resources.netIcon;

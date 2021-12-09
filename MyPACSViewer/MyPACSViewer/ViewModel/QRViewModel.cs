@@ -12,6 +12,7 @@ using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
+using System.Windows.Data;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -86,9 +87,16 @@ namespace MyPACSViewer.ViewModel
             _findResultList = new();
         }
 
+        private static string GetTimestamp()
+        {
+            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
+            return Convert.ToInt64(ts.TotalMilliseconds).ToString();
+        }
+
         public ICommand FindCommand => new RelayCommand(async () =>
         {
             bool useID = SelectedSearchField == Properties.Resources.patientIDStr;
+            _findResultList.Clear();
             var findDatasetList = await scu.RunCFind(SearchText, useID);
             for (int i = 0; i < findDatasetList.Count - 1; i++)
             {
@@ -100,7 +108,7 @@ namespace MyPACSViewer.ViewModel
         {
             if (FindResultList.Count != 0)
             {
-                string storagePath = @".\" + StorageRoot + @".\" + DateTime.Now;
+                string storagePath = @".\" + StorageRoot + @".\" + GetTimestamp();
                 scu.StoragePath = storagePath;
                 foreach (var result in FindResultList)
                 {
@@ -117,19 +125,19 @@ namespace MyPACSViewer.ViewModel
         {
             if (FindResultList.Count != 0)
             {
-                string storagePath = @".\" + StorageRoot + @".\" + DateTime.Now;
+                string storagePath = @".\" + StorageRoot + @".\" + GetTimestamp();
                 scu.StoragePath = storagePath;
-                int fileCount = 0;
+                int seriesCount = 0;
                 foreach (var result in FindResultList)
                 {
                     if (result.IsSelected)
                     {
-                        fileCount++;
+                        seriesCount++;
                         await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
                     }
                 }
                 Messenger.Default.Send(storagePath, Properties.Resources.messageKey_folder);
-                Messenger.Default.Send($"{fileCount} Files Retrieved", Properties.Resources.messageKey_status);
+                Messenger.Default.Send($"{seriesCount} Files Retrieved", Properties.Resources.messageKey_status);
             }
             Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
         });

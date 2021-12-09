@@ -19,16 +19,11 @@ namespace MyPACSViewer
     /// <summary>
     /// Interaction logic for QRConfigWindow.xaml
     /// </summary>
-    public partial class QRConfigWindow : Window
+    public partial class QRWindow : Window
     {
-        public QRConfigWindow()
+        public QRWindow()
         {
             InitializeComponent();
-        }
-
-        private void CancelBtn_Click(object sender, RoutedEventArgs e)
-        {
-            Close();
         }
     }
 }

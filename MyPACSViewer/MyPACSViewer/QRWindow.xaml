@@ -1,4 +1,4 @@
-﻿<Window x:Class="MyPACSViewer.QRConfigWindow"
+﻿<Window x:Class="MyPACSViewer.QRWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -13,8 +13,8 @@
     <DockPanel Margin="15">
         <DockPanel DockPanel.Dock="Top">
             <ComboBox DockPanel.Dock="Left" Width="110" SelectedIndex="0" SelectedItem="{Binding SelectedSearchField}" ItemsSource="{Binding SearchFieldList}"></ComboBox>
-            <Button DockPanel.Dock="Right" Padding="15,0,15,0" Name="FindBtn" >Find</Button>
-            <TextBox Margin="15,0,15,0" Name="PatientNameBox"></TextBox>
+            <Button DockPanel.Dock="Right" Padding="15,0,15,0" Command="{Binding FindCommand}" >Find</Button>
+            <TextBox Margin="15,0,15,0" Text="{Binding SearchText}"/>
         </DockPanel>
 
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
@@ -23,7 +23,7 @@
             <Button Padding="15,5,15,5" Command="{Binding CancelCommand}">Cancel</Button>
         </StackPanel>
 
-        <ListView Margin="0,10,0,10" Name="QRListView">
+        <ListView Margin="0,10,0,10" ItemsSource="{Binding FindResultList}">
             <ListView.View>
                 <GridView ColumnHeaderToolTip="Series Found">
                     <GridViewColumn>
@@ -33,10 +33,13 @@
                             </DataTemplate>
                         </GridViewColumn.CellTemplate>
                     </GridViewColumn>
-                    <GridViewColumn DisplayMemberBinding="{Binding StudyUID}" Header="Study UID"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding SeriesUID}" Header="Series UID"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding SeriesCount}" Header="Num of Frames"/>
-
+                    <GridViewColumn DisplayMemberBinding="{Binding PatientName}" Header="Patient Name"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding PatientID}" Header="Patient ID"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding StudyInstanceUID}" Header="Study UID"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding Modality}" Header="Modality"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding BodyPartExamined}" Header="Body Part"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding SeriesInstanceUID}" Header="Series UID"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding SeriesDescription}" Header="Series Description"/>
                 </GridView>
                 
             </ListView.View>
