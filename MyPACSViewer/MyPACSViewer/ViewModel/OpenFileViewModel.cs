@@ -10,6 +10,7 @@ using System.Windows.Input;
 using MyPACSViewer.Model;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -34,7 +35,7 @@ namespace MyPACSViewer.ViewModel
             openFileDialog.DefaultExt = "dcm";
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
-                DicomRootPath = openFileDialog.FileName;
+                Messenger.Default.Send(openFileDialog.FileName, Properties.Resources.messageKey_file);
             }
         });
     }

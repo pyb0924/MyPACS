@@ -6,7 +6,6 @@
         xmlns:local="clr-namespace:MyPACSViewer"
         xmlns:view="clr-namespace:MyPACSViewer.View"
         xmlns:vm="clr-namespace:MyPACSViewer.ViewModel"
-        xmlns:model="clr-namespace:MyPACSViewer.Model"
         mc:Ignorable="d"
         Title="MyPACSViewer" Icon="/icon.ico" Height="720" Width="1280">
     <Window.Resources>
@@ -14,6 +13,7 @@
         <vm:OpenFolderViewModel x:Key="OpenFolderVM"/>
         <vm:OpenQRViewModel x:Key="OpenQRVM"/>
         <vm:FileExplorerViewModel x:Key="FileExplorerVM"/>
+        <vm:StatusViewModel x:Key="StatusVM"/>
     </Window.Resources>
     <Grid>
         <DockPanel>
@@ -21,7 +21,7 @@
                 <MenuItem Header="File" >
                     <MenuItem Header="Open File" DataContext="{StaticResource OpenFileVM}"  Command="{Binding OpenFileCommand}"/>
                     <MenuItem Header="Open Folder" DataContext="{StaticResource OpenFolderVM}" Command="{Binding OpenFolderCommand}" />
-                    <MenuItem Header="Query/Retrive" DataContext="{StaticResource OpenQRVM}" Command ="{Binding OpenQRWindowCommand}"/>
+                    <MenuItem Header="Query/Retrive" DataContext="{StaticResource OpenQRVM}" Command="{Binding OpenQRWindowCommand}"/>
                     <Separator/>
                     <MenuItem Header="Export"/>
                     <MenuItem Header="Exit"/>
@@ -52,36 +52,41 @@
 
             </ToolBar>
 
-            <StatusBar x:Name="StatusBar" DockPanel.Dock="Bottom" Height="24">
+            <StatusBar x:Name="StatusBar" DockPanel.Dock="Bottom" Height="24" DataContext="{StaticResource StatusVM}">
                 <StatusBarItem >
-                    <TextBlock x:Name="StatusBarText"/>
+                    <TextBlock x:Name="StatusBarText" Text="{Binding Text}"/>
                 </StatusBarItem>
             </StatusBar>
 
             <DockPanel>
-                <ScrollViewer DockPanel.Dock="Left" MinWidth="300">
-                    <TreeView x:Name="treeView" VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,-10,0,0"
-                            DataContext="{StaticResource FileExplorerVM}" ItemsSource="{Binding FileTreeDataList}" BorderThickness="0" >
-                        <TreeView.ItemContainerStyle>
-                            <Style TargetType="{x:Type TreeViewItem}">
-                                <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                                <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                                <Setter Property="FontWeight" Value="Normal" />
-                                <Style.Triggers>
-                                    <Trigger Property="IsSelected" Value="True">
-                                        <Setter Property="FontWeight" Value="Bold" />
-                                    </Trigger>
-                                </Style.Triggers>
-                            </Style>
-                        </TreeView.ItemContainerStyle>
+                <TreeView x:Name="treeView" Width="Auto" MinWidth="300"
+                            DataContext="{StaticResource FileExplorerVM}" ItemsSource="{Binding FileTreeDataList}">
+                    <TreeView.ItemContainerStyle>
+                        <Style  TargetType="{x:Type TreeViewItem}">
+                            <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                            <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                            <Setter Property="FontWeight" Value="Normal" />
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="FontWeight" Value="Bold" />
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TreeView.ItemContainerStyle>
 
-                        <TreeView.ItemTemplate>
-                            <HierarchicalDataTemplate ItemsSource="{Binding Children}">
-                                <TextBlock x:Name="treeViewItemTB" Text="{Binding itemName}" Tag="{Binding itemId}"/>
-                            </HierarchicalDataTemplate>
-                        </TreeView.ItemTemplate>
-                    </TreeView>
-                </ScrollViewer>
+                    <TreeView.ItemTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children.Values}">
+                            <StackPanel Orientation="Horizontal" Margin="2">
+                                <Image Source="{Binding Icon}" Height="15" Margin="0,0,5,0"/>
+                                <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}"></TextBlock>
+                                <StackPanel.ToolTip>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" TextWrapping="Wrap" MaxWidth="200"></TextBlock>
+                                </StackPanel.ToolTip>
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.ItemTemplate>
+                </TreeView>
+
 
                 <Grid>
                     <view:Viewer2D x:Name="Viewer2D"/>

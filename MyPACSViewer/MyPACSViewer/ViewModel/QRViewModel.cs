@@ -9,14 +9,15 @@ using System.Windows.Input;
 using System.Collections.ObjectModel;
 using FellowOakDicom;
 using System.Windows;
-using MyPACSViewer.Utils;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace MyPACSViewer.ViewModel
 {
     class QRViewModel : ViewModelBase
     {
+        public string StorageRoot { get; set; }
 
         private List<string> _searchFieldList = new()
         {
@@ -80,9 +81,9 @@ namespace MyPACSViewer.ViewModel
             int port = int.Parse(ConfigurationManager.AppSettings["port"]);
             string server = ConfigurationManager.AppSettings["server"];
             string aet = ConfigurationManager.AppSettings["aet"];
-            string storage = ConfigurationManager.AppSettings["storage"];
-            scu = new(host, port, server, aet, @".\" + storage);
-            SearchText = "1234";
+            StorageRoot = ConfigurationManager.AppSettings["storage"];
+            scu = new(host, port, server, aet);
+            _findResultList = new();
         }
 
         public ICommand FindCommand => new RelayCommand(async () =>
@@ -97,23 +98,42 @@ namespace MyPACSViewer.ViewModel
 
         public ICommand GetAllCommand => new RelayCommand(async () =>
         {
-            foreach (var result in FindResultList)
+            if (FindResultList.Count != 0)
             {
-                await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
-            }
-        });
-
-        public ICommand GetSelectdCommand => new RelayCommand(async () =>
-        {
-            foreach (var result in FindResultList)
-            {
-                if (result.IsSelected)
+                string storagePath = @".\" + StorageRoot + @".\" + DateTime.Now;
+                scu.StoragePath = storagePath;
+                foreach (var result in FindResultList)
                 {
                     await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
                 }
+                Messenger.Default.Send(storagePath, Properties.Resources.messageKey_folder);
+                Messenger.Default.Send($"{FindResultList.Count} Files Retrieved",Properties.Resources.messageKey_status);
             }
+
+            Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
         });
 
-        //public ICommand CancelCommand => new CommandBase(() => DialogResult = false);
+        public ICommand GetSelectedCommand => new RelayCommand(async () =>
+        {
+            if (FindResultList.Count != 0)
+            {
+                string storagePath = @".\" + StorageRoot + @".\" + DateTime.Now;
+                scu.StoragePath = storagePath;
+                int fileCount = 0;
+                foreach (var result in FindResultList)
+                {
+                    if (result.IsSelected)
+                    {
+                        fileCount++;
+                        await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
+                    }
+                }
+                Messenger.Default.Send(storagePath, Properties.Resources.messageKey_folder);
+                Messenger.Default.Send($"{fileCount} Files Retrieved", Properties.Resources.messageKey_status);
+            }
+            Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
+        });
+
+        public ICommand CancelCommand => new RelayCommand(() => Messenger.Default.Send("Close", Properties.Resources.messageKey_close));
     }
 }

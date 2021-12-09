@@ -133,8 +133,29 @@
   <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="imageIcon" xml:space="preserve">
+    <value>View/Assets/instance.png</value>
+  </data>
   <data name="instance" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\instance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="messageKey_close" xml:space="preserve">
+    <value>close</value>
+  </data>
+  <data name="messageKey_datasets" xml:space="preserve">
+    <value>datasets</value>
+  </data>
+  <data name="messageKey_file" xml:space="preserve">
+    <value>file</value>
+  </data>
+  <data name="messageKey_folder" xml:space="preserve">
+    <value>folder</value>
+  </data>
+  <data name="messageKey_show" xml:space="preserve">
+    <value>show</value>
+  </data>
+  <data name="messageKey_status" xml:space="preserve">
+    <value>status</value>
   </data>
   <data name="netIcon" xml:space="preserve">
     <value>Assets/net.png</value>
@@ -154,6 +175,9 @@
   <data name="patient" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\patient.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="patientIcon" xml:space="preserve">
+    <value>View/Assets/patient.png</value>
+  </data>
   <data name="patientIDStr" xml:space="preserve">
     <value>Patient ID</value>
   </data>
@@ -172,8 +196,14 @@
   <data name="series" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\series.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="seriesIcon" xml:space="preserve">
+    <value>View/Assets/series.png</value>
+  </data>
   <data name="study" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\study.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="studyIcon" xml:space="preserve">
+    <value>View/Assets/study.png</value>
   </data>
   <data name="window_merge" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\view\assets\window-merge.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

@@ -29,7 +29,6 @@ namespace MyPACSViewer
         private void CancelBtn_Click(object sender, RoutedEventArgs e)
         {
             Close();
-
         }
     }
 }

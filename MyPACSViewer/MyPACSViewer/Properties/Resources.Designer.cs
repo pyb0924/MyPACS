@@ -111,12 +111,75 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View/Assets/instance.png.
+        /// </summary>
+        internal static string imageIcon {
+            get {
+                return ResourceManager.GetString("imageIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap instance {
             get {
                 object obj = ResourceManager.GetObject("instance", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to close.
+        /// </summary>
+        internal static string messageKey_close {
+            get {
+                return ResourceManager.GetString("messageKey_close", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to datasets.
+        /// </summary>
+        internal static string messageKey_datasets {
+            get {
+                return ResourceManager.GetString("messageKey_datasets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to file.
+        /// </summary>
+        internal static string messageKey_file {
+            get {
+                return ResourceManager.GetString("messageKey_file", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to folder.
+        /// </summary>
+        internal static string messageKey_folder {
+            get {
+                return ResourceManager.GetString("messageKey_folder", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to show.
+        /// </summary>
+        internal static string messageKey_show {
+            get {
+                return ResourceManager.GetString("messageKey_show", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to status.
+        /// </summary>
+        internal static string messageKey_status {
+            get {
+                return ResourceManager.GetString("messageKey_status", resourceCulture);
             }
         }
         
@@ -172,6 +235,15 @@ namespace MyPACSViewer.Properties {
             get {
                 object obj = ResourceManager.GetObject("patient", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View/Assets/patient.png.
+        /// </summary>
+        internal static string patientIcon {
+            get {
+                return ResourceManager.GetString("patientIcon", resourceCulture);
             }
         }
         
@@ -232,12 +304,30 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to View/Assets/series.png.
+        /// </summary>
+        internal static string seriesIcon {
+            get {
+                return ResourceManager.GetString("seriesIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap study {
             get {
                 object obj = ResourceManager.GetObject("study", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to View/Assets/study.png.
+        /// </summary>
+        internal static string studyIcon {
+            get {
+                return ResourceManager.GetString("studyIcon", resourceCulture);
             }
         }
         

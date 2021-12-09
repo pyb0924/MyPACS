@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Windows.Input;
 using GalaSoft.MvvmLight.CommandWpf;
+using GalaSoft.MvvmLight.Messaging;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -16,22 +18,16 @@ namespace MyPACSViewer.ViewModel
             Source = Properties.Resources.openFolderIcon;
             Text = Properties.Resources.openFolderStr;
         }
-        public string DicomRootPath { get; set; }
-        private void GetDicomFolderPath()
-        {
-
-        }
-
 
         public ICommand OpenFolderCommand => new RelayCommand(() =>
         {
             FolderBrowserDialog openFolderDialog = new();
-            if (openFolderDialog.ShowDialog() != System.Windows.Forms.DialogResult.OK)
+            if (openFolderDialog.ShowDialog() != DialogResult.OK)
             {
-                // StatusBarText.Text = "Open Folder Failed!";
+                Messenger.Default.Send("Open Folder Failed!", Properties.Resources.messageKey_status);
                 return;
             }
-            DicomRootPath = openFolderDialog.SelectedPath;
+            Messenger.Default.Send(openFolderDialog.SelectedPath, Properties.Resources.messageKey_folder);
         });
     }
 }

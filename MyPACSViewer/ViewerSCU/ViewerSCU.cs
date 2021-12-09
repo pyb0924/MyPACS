@@ -12,7 +12,7 @@ namespace ViewerSCU
 {
     public class ViewerSCU
     {
-        private string StoragePath { get; }
+        public string StoragePath { get; set; } = @".\DICOM";
         private static readonly string _Encoding = "IOS_IR 100";
 
         public string Host { get; } = "localhost";
@@ -34,13 +34,12 @@ namespace ViewerSCU
             Client.AdditionalPresentationContexts.AddRange(pcs);
         }
 
-        public ViewerSCU(string host, int port, string serverAET, string aet,string storagePath)
+        public ViewerSCU(string host, int port, string serverAET, string aet)
         {
             Host = host;
             Port = port;
             ServerAET = serverAET;
             Aet = aet;
-            StoragePath = storagePath;
             Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
 
