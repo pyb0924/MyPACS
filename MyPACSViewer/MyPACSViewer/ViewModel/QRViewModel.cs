@@ -1,18 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MyPACSViewer.Model;
 using System.Configuration;
 using System.Windows.Input;
 using System.Collections.ObjectModel;
-using FellowOakDicom;
-using System.Windows;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
-using System.Windows.Data;
+using MyPACSViewer.Model;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -110,12 +104,13 @@ namespace MyPACSViewer.ViewModel
             {
                 string storagePath = @".\" + StorageRoot + @".\" + GetTimestamp();
                 scu.StoragePath = storagePath;
+                Messenger.Default.Send($"Retrieving Files...", Properties.Resources.messageKey_status);
                 foreach (var result in FindResultList)
                 {
                     await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
                 }
                 Messenger.Default.Send(storagePath, Properties.Resources.messageKey_folder);
-                Messenger.Default.Send($"{FindResultList.Count} Files Retrieved",Properties.Resources.messageKey_status);
+                Messenger.Default.Send($"{FindResultList.Count} Series Retrieved",Properties.Resources.messageKey_status);
             }
 
             Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
@@ -128,6 +123,7 @@ namespace MyPACSViewer.ViewModel
                 string storagePath = @".\" + StorageRoot + @".\" + GetTimestamp();
                 scu.StoragePath = storagePath;
                 int seriesCount = 0;
+                Messenger.Default.Send($"Retrieving Files...", Properties.Resources.messageKey_status);
                 foreach (var result in FindResultList)
                 {
                     if (result.IsSelected)
@@ -137,7 +133,7 @@ namespace MyPACSViewer.ViewModel
                     }
                 }
                 Messenger.Default.Send(storagePath, Properties.Resources.messageKey_folder);
-                Messenger.Default.Send($"{seriesCount} Files Retrieved", Properties.Resources.messageKey_status);
+                Messenger.Default.Send($"{seriesCount} Series Retrieved", Properties.Resources.messageKey_status);
             }
             Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
         });

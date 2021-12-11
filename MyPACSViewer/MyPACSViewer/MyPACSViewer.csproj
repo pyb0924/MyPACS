@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <None Remove="View\Assets\direction-adjustment.svg" />
+    <None Remove="View\Assets\exit.png" />
     <None Remove="View\Assets\file.png" />
     <None Remove="View\Assets\flip-horizontal.png" />
     <None Remove="View\Assets\flip-vertical.png" />
@@ -36,8 +37,6 @@
     <None Remove="View\Assets\rotation-vertical.svg" />
     <None Remove="View\Assets\series.png" />
     <None Remove="View\Assets\study.png" />
-    <None Remove="View\Assets\window-merge.png" />
-    <None Remove="View\Assets\window-split.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -47,6 +46,7 @@
   <ItemGroup>
     <PackageReference Include="CommonServiceLocator" Version="2.0.6" />
     <PackageReference Include="fo-dicom" Version="5.0.1" />
+    <PackageReference Include="fo-dicom.Imaging.Desktop" Version="5.0.1" />
     <PackageReference Include="MvvmLight" Version="5.4.1.1" />
     <PackageReference Include="MvvmLightLibs" Version="5.4.1.1" />
   </ItemGroup>
@@ -56,6 +56,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="View\Assets\exit.png" />
     <Resource Include="View\Assets\file.png" />
     <Resource Include="View\Assets\flip-horizontal.png" />
     <Resource Include="View\Assets\flip-vertical.png" />
@@ -68,8 +69,6 @@
     <Resource Include="View\Assets\revert.png" />
     <Resource Include="View\Assets\series.png" />
     <Resource Include="View\Assets\study.png" />
-    <Resource Include="View\Assets\window-merge.png" />
-    <Resource Include="View\Assets\window-split.png" />
   </ItemGroup>
 
   <ItemGroup>

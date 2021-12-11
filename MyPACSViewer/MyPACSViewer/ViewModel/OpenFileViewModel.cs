@@ -1,14 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+﻿using System.Windows.Forms;
 using System.Windows.Input;
-using MyPACSViewer.Model;
-using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 
@@ -16,7 +7,6 @@ namespace MyPACSViewer.ViewModel
 {
     class OpenFileViewModel : ToolbarViewModel
     {
-        public string DicomRootPath { get; set; }
         public OpenFileViewModel()
         {
             Source = Properties.Resources.openFileIcon;
@@ -26,13 +16,13 @@ namespace MyPACSViewer.ViewModel
         public ICommand OpenFileCommand => new RelayCommand(() =>
         {
             OpenFileDialog openFileDialog = new();
-            openFileDialog.Title = "Open DICOM File";
-            openFileDialog.Filter = "DICOM Files|*.dcm";
+            openFileDialog.Title = Properties.Resources.openFileDialogTitle;
+            openFileDialog.Filter = Properties.Resources.openFileDialogFilter;
             openFileDialog.FileName = string.Empty;
             openFileDialog.FilterIndex = 1;
             openFileDialog.Multiselect = false;
             openFileDialog.RestoreDirectory = true;
-            openFileDialog.DefaultExt = "dcm";
+            openFileDialog.DefaultExt = Properties.Resources.dicomExt;
             if (openFileDialog.ShowDialog() == DialogResult.OK)
             {
                 Messenger.Default.Send(openFileDialog.FileName, Properties.Resources.messageKey_file);

@@ -6,6 +6,6 @@
              xmlns:local="clr-namespace:MyPACSViewer.View">
     <StackPanel>
         <Image Height="30" Source="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ToolbarButton}},Path=Source}"/>
-        <AccessText Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ToolbarButton}},Path=Text}"/>
+        <AccessText Margin="0,3,0,0" Text="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType={x:Type local:ToolbarButton}},Path=Text}"/>
     </StackPanel>
 </Button>

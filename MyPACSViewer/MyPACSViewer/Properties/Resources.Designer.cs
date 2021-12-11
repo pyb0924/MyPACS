@@ -61,6 +61,33 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to dcm.
+        /// </summary>
+        internal static string dicomExt {
+            get {
+                return ResourceManager.GetString("dicomExt", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets/exit.png.
+        /// </summary>
+        internal static string exitIcon {
+            get {
+                return ResourceManager.GetString("exitIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Exit App.
+        /// </summary>
+        internal static string exitStr {
+            get {
+                return ResourceManager.GetString("exitStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap file {
@@ -166,11 +193,38 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to show.
+        ///   Looks up a localized string similar to indexChange.
         /// </summary>
-        internal static string messageKey_show {
+        internal static string messageKey_indexChange {
             get {
-                return ResourceManager.GetString("messageKey_show", resourceCulture);
+                return ResourceManager.GetString("messageKey_indexChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to selectedChange.
+        /// </summary>
+        internal static string messageKey_selectedChange {
+            get {
+                return ResourceManager.GetString("messageKey_selectedChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to seriesIndex.
+        /// </summary>
+        internal static string messageKey_seriesIndex {
+            get {
+                return ResourceManager.GetString("messageKey_seriesIndex", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to seriesTotal.
+        /// </summary>
+        internal static string messageKey_seriesTotal {
+            get {
+                return ResourceManager.GetString("messageKey_seriesTotal", resourceCulture);
             }
         }
         
@@ -189,6 +243,24 @@ namespace MyPACSViewer.Properties {
         internal static string netIcon {
             get {
                 return ResourceManager.GetString("netIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to DICOM Files|*.dcm.
+        /// </summary>
+        internal static string openFileDialogFilter {
+            get {
+                return ResourceManager.GetString("openFileDialogFilter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Open DICOM File.
+        /// </summary>
+        internal static string openFileDialogTitle {
+            get {
+                return ResourceManager.GetString("openFileDialogTitle", resourceCulture);
             }
         }
         
@@ -328,26 +400,6 @@ namespace MyPACSViewer.Properties {
         internal static string studyIcon {
             get {
                 return ResourceManager.GetString("studyIcon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap window_merge {
-            get {
-                object obj = ResourceManager.GetObject("window_merge", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap window_split {
-            get {
-                object obj = ResourceManager.GetObject("window_split", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

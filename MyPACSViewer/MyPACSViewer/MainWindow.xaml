@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:local="clr-namespace:MyPACSViewer"
         xmlns:view="clr-namespace:MyPACSViewer.View"
         xmlns:vm="clr-namespace:MyPACSViewer.ViewModel"
@@ -12,6 +13,7 @@
         <vm:OpenFileViewModel x:Key="OpenFileVM"/>
         <vm:OpenFolderViewModel x:Key="OpenFolderVM"/>
         <vm:OpenQRViewModel x:Key="OpenQRVM"/>
+        <vm:ExitViewModel x:Key="ExitVM"/>
         <vm:FileExplorerViewModel x:Key="FileExplorerVM"/>
         <vm:StatusViewModel x:Key="StatusVM"/>
     </Window.Resources>
@@ -24,7 +26,7 @@
                     <MenuItem Header="Query/Retrive" DataContext="{StaticResource OpenQRVM}" Command="{Binding OpenQRWindowCommand}"/>
                     <Separator/>
                     <MenuItem Header="Export"/>
-                    <MenuItem Header="Exit"/>
+                    <MenuItem Header="Exit" DataContext="{StaticResource ExitVM}" Command="{Binding ExitCommmand}"/>
                 </MenuItem>
 
                 <MenuItem Header="Image">
@@ -48,6 +50,9 @@
                                     Source="{Binding Source}" Text="{Binding Text}"/>
                 <Separator/>
                 <view:ToolbarButton DataContext="{StaticResource OpenQRVM}" Command="{Binding OpenQRWindowCommand}"
+                                    Source="{Binding Source}" Text="{Binding Text}"/>
+                <Separator/>
+                <view:ToolbarButton DataContext="{StaticResource ExitVM}" Command="{Binding ExitCommmand}"
                                     Source="{Binding Source}" Text="{Binding Text}"/>
 
             </ToolBar>
@@ -73,6 +78,12 @@
                             </Style.Triggers>
                         </Style>
                     </TreeView.ItemContainerStyle>
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedItemChanged">
+                            <i:InvokeCommandAction Command="{Binding Path=SelectedItemChangedCommand}" 
+                                           CommandParameter="{Binding ElementName=treeView, Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
 
                     <TreeView.ItemTemplate>
                         <HierarchicalDataTemplate ItemsSource="{Binding Children.Values}">

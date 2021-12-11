@@ -1,20 +1,21 @@
-﻿using MyPACSViewer.Model;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
+using System.IO;
+using System.Windows.Input;
 using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.Messaging;
+using GalaSoft.MvvmLight.CommandWpf;
 using FellowOakDicom;
-using System.IO;
+using MyPACSViewer.Model;
+using MyPACSViewer.Message;
 
 namespace MyPACSViewer.ViewModel
 {
     class FileExplorerViewModel : ViewModelBase
     {
-        private Dictionary<string, FileNodeModel> _DicomDict = new();
+        private SortedDictionary<string, FileNodeModel> _DicomDict = new();
         private ObservableCollection<FileNodeModel> _fileTreeDataList;
         public ObservableCollection<FileNodeModel> FileTreeDataList
         {
@@ -26,7 +27,6 @@ namespace MyPACSViewer.ViewModel
             }
         }
 
-
         public FileExplorerViewModel()
         {
             Messenger.Default.Register<string>(this, Properties.Resources.messageKey_file, GenerateFromFile);
@@ -36,6 +36,7 @@ namespace MyPACSViewer.ViewModel
         private async Task<bool> AddToDicomDict(FileInfo file, bool selected)
         {
             string tmp;
+            int index;
             DicomFile dcmFile;
             DicomDataset dcmDataSet;
             FileNodeModel patientNode, studyNode, seriesNode, imageNode;
@@ -86,7 +87,8 @@ namespace MyPACSViewer.ViewModel
                 }
                 else
                 {
-                    imageNode = new(file.Name, Properties.Resources.imageIcon, file.FullName);
+                    index = seriesNode.Children.Count;
+                    imageNode = new(file.Name, Properties.Resources.imageIcon, file.FullName, index);
                     imageNode.IsSelected = selected;
                     seriesNode.Children.Add(tmp, imageNode);
                 }
@@ -132,5 +134,22 @@ namespace MyPACSViewer.ViewModel
             Messenger.Default.Send(
                 $"Open {fileCount} Files Successfully! Total: {files.Length} Files", Properties.Resources.messageKey_status);
         }
+
+
+        public ICommand SelectedItemChangedCommand => new RelayCommand<FileNodeModel>((selectedItem) =>
+        {
+            if (selectedItem.Path is null || selectedItem.Index == -1)
+            {
+                return;
+            }
+            DicomDataset dataset = DicomFile.Open(selectedItem.Path).Dataset;
+            FileNodeModel seriesNode = _DicomDict[dataset.GetString(DicomTag.PatientID)]
+                .Children[dataset.GetString(DicomTag.StudyInstanceUID)]
+                .Children[dataset.GetString(DicomTag.SeriesInstanceUID)];
+
+            RenderSeriesMessage message = new(seriesNode, selectedItem.Index);
+
+            Messenger.Default.Send(message, Properties.Resources.messageKey_selectedChange);
+        });
     }
 }
