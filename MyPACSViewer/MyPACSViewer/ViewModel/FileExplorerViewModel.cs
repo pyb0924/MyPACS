@@ -15,7 +15,7 @@ namespace MyPACSViewer.ViewModel
 {
     class FileExplorerViewModel : ViewModelBase
     {
-        private SortedDictionary<string, FileNodeModel> _DicomDict = new();
+        private readonly SortedDictionary<string, FileNodeModel> _DicomDict = new();
         private ObservableCollection<FileNodeModel> _fileTreeDataList;
         public ObservableCollection<FileNodeModel> FileTreeDataList
         {
@@ -131,10 +131,9 @@ namespace MyPACSViewer.ViewModel
                 isFirst = false;
             }
             FileTreeDataList = new(_DicomDict.Values);
-            Messenger.Default.Send(
-                $"Open {fileCount} Files Successfully! Total: {files.Length} Files", Properties.Resources.messageKey_status);
+            Messenger.Default.Send($"Open {fileCount} Files Successfully! " +
+                $"Total: {files.Length} Files", Properties.Resources.messageKey_status);
         }
-
 
         public ICommand SelectedItemChangedCommand => new RelayCommand<FileNodeModel>((selectedItem) =>
         {

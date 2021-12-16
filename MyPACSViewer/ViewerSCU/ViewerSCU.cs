@@ -66,9 +66,13 @@ namespace ViewerSCU
             return resDatasetList;
         }
 
-        public async Task RunCGet(string studyInstanceUID, string seriesInstanceUID)
+        public async Task RunCGet(string studyInstanceUID, string seriesInstanceUID, bool isMask = false)
         {
             DicomCGetRequest request = new(studyInstanceUID, seriesInstanceUID);
+            if (isMask)
+            {
+                request.Dataset.AddOrUpdate(DicomTag.Modality, "mask");
+            }
             Client.OnCStoreRequest += (DicomCStoreRequest req) =>
             {
                 Console.WriteLine(DateTime.Now.ToString() + $"{req.Dataset.GetSingleValue<string>(DicomTag.SOPInstanceUID)} received");

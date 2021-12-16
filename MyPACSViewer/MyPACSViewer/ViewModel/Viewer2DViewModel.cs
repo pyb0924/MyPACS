@@ -15,7 +15,7 @@ namespace MyPACSViewer.ViewModel
     {
         public FileNodeModel SeriesNode { get; set; }
         private DicomDataset _dataset;
-        private bool hasMask = false;
+        private bool _isMaskMode;
 
         #region Properties
         private WriteableBitmap _mainImage;
@@ -112,18 +112,20 @@ namespace MyPACSViewer.ViewModel
         {
             new DicomSetupBuilder().RegisterServices(s => s.AddImageManager<WPFImageManager>()).Build();
             Messenger.Default.Register<RenderSeriesMessage>(this, Properties.Resources.messageKey_selectedChange, OnSeriesChange);
+            Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_detect,OnChangeMask);
             SliderValue = 1;
             SliderMax = 10;
+            _isMaskMode = false;
         }
 
-        private void Render(FileNodeModel imageNode)
+        private void RenderImage()
         {
-            _dataset = DicomFile.Open(imageNode.Path).Dataset;
-            // render image
             DicomImage image = new(_dataset);
             MainImage = image.RenderImage().As<WriteableBitmap>();
+        }
 
-            // render corner info
+        private void RenderCornerInfo()
+        {
             LeftTopText = $"{_dataset.GetSingleValueOrDefault(DicomTag.PatientName, string.Empty)}\n" +
                 $"{_dataset.GetSingleValueOrDefault(DicomTag.PatientID, string.Empty)} " +
                 $"{_dataset.GetSingleValueOrDefault(DicomTag.PatientSex, string.Empty)}\n" +
@@ -139,15 +141,24 @@ namespace MyPACSViewer.ViewModel
 
             RightBottomText = $"WL: {_dataset.GetSingleValueOrDefault(DicomTag.WindowCenter, 0)} " +
                 $"WW: {_dataset.GetSingleValueOrDefault(DicomTag.WindowWidth, 0)}";
+        }
 
-            if (hasMask)
-            {
-                // TODO render mask
-            }
-
+        private void Render()
+        {
+            RenderImage();
+            RenderCornerInfo();
             Messenger.Default.Send($"Rendered Image {SliderValue}/{SliderMax}", Properties.Resources.messageKey_status);
         }
 
+        private void OnChangeMask(bool maskMode)
+        {
+            _isMaskMode = maskMode;
+            if(_isMaskMode)
+            {
+
+            }
+            RenderImage();
+        }
         private void OnSeriesChange(RenderSeriesMessage message)
         {
             SeriesNode = message.SeriesNode;
@@ -156,14 +167,16 @@ namespace MyPACSViewer.ViewModel
 
             var query = from node in SeriesNode.Children.Values where node.Index == message.Index select node;
             FileNodeModel imageNode = query.First();
-            Render(imageNode);
+            _dataset = DicomFile.Open(imageNode.Path).Dataset;
+            Render();
         }
 
         public ICommand IndexChangeCommand => new RelayCommand(() =>
         {
             var query = from node in SeriesNode.Children.Values where node.Index == SliderValue select node;
             FileNodeModel imageNode = query.First();
-            Render(imageNode);
+            _dataset = DicomFile.Open(imageNode.Path).Dataset;
+            Render();
         });
     }
 }

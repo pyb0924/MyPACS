@@ -2,7 +2,7 @@ import json
 import logging.config
 from functools import partial
 import traceback
-import time
+from pathlib import Path
 
 from pydicom import dcmread
 from pydicom.dataset import Dataset
@@ -10,6 +10,7 @@ from pynetdicom import AE, StoragePresentationContexts, evt
 from pynetdicom import sop_class
 
 from database import MyPACSdatabase
+from detect import get_mask
 
 
 class MyPACSServer(AE):
@@ -151,7 +152,14 @@ class MyPACSServer(AE):
                 return
 
             res_dataset = dcmread(row['file_path'])
-            server.logger.debug(f'running C-GET from {row["file_path"]}')
-            # TODO image processing
+
+            if req_dataset.Modality == 'mask':
+                xml_path = next(Path(row['file_path']).parent.glob("*.xml"))
+                if xml_path is None:
+                    server.logger.error(f'No XML file found at {row["file_path"]}')
+                    yield 0xAA04, None
+                res_dataset = get_mask(res_dataset, xml_path)
+            else:
+                server.logger.debug(f'running C-GET from {row["file_path"]}')
             # Pending
             yield 0xFF00, res_dataset
