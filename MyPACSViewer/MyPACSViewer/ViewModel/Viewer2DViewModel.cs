@@ -7,14 +7,17 @@ using GalaSoft.MvvmLight.CommandWpf;
 using FellowOakDicom.Imaging;
 using FellowOakDicom;
 using MyPACSViewer.Model;
-using MyPACSViewer.Message;
+using MyPACSViewer.Utils;
+using System.Configuration;
+using System.IO;
 
 namespace MyPACSViewer.ViewModel
 {
     class Viewer2DViewModel : ViewModelBase
     {
         public FileNodeModel SeriesNode { get; set; }
-        private DicomDataset _dataset;
+        private DicomDataset _mainDataset;
+        private DicomDataset _maskDataset;
         private bool _isMaskMode;
 
         #region Properties
@@ -112,7 +115,7 @@ namespace MyPACSViewer.ViewModel
         {
             new DicomSetupBuilder().RegisterServices(s => s.AddImageManager<WPFImageManager>()).Build();
             Messenger.Default.Register<RenderSeriesMessage>(this, Properties.Resources.messageKey_selectedChange, OnSeriesChange);
-            Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_detect,OnChangeMask);
+            Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_detect, OnChangeMask);
             SliderValue = 1;
             SliderMax = 10;
             _isMaskMode = false;
@@ -120,27 +123,31 @@ namespace MyPACSViewer.ViewModel
 
         private void RenderImage()
         {
-            DicomImage image = new(_dataset);
+            DicomImage image = new(_mainDataset);
+            if(_isMaskMode)
+            {
+            }
             MainImage = image.RenderImage().As<WriteableBitmap>();
+           
         }
 
         private void RenderCornerInfo()
         {
-            LeftTopText = $"{_dataset.GetSingleValueOrDefault(DicomTag.PatientName, string.Empty)}\n" +
-                $"{_dataset.GetSingleValueOrDefault(DicomTag.PatientID, string.Empty)} " +
-                $"{_dataset.GetSingleValueOrDefault(DicomTag.PatientSex, string.Empty)}\n" +
-                $"{_dataset.GetSingleValueOrDefault(DicomTag.StudyDescription, string.Empty)}\n";
+            LeftTopText = $"{_mainDataset.GetSingleValueOrDefault(DicomTag.PatientName, string.Empty)}\n" +
+                $"{_mainDataset.GetSingleValueOrDefault(DicomTag.PatientID, string.Empty)} " +
+                $"{_mainDataset.GetSingleValueOrDefault(DicomTag.PatientSex, string.Empty)}\n" +
+                $"{_mainDataset.GetSingleValueOrDefault(DicomTag.StudyDescription, string.Empty)}\n";
 
-            RightTopText = $"{_dataset.GetSingleValueOrDefault(DicomTag.ManufacturerModelName, string.Empty)}\n" +
-                $"{_dataset.GetSingleValueOrDefault(DicomTag.StudyDate, string.Empty)} " +
-                $"{_dataset.GetSingleValueOrDefault(DicomTag.StudyTime, string.Empty)}";
+            RightTopText = $"{_mainDataset.GetSingleValueOrDefault(DicomTag.ManufacturerModelName, string.Empty)}\n" +
+                $"{_mainDataset.GetSingleValueOrDefault(DicomTag.StudyDate, string.Empty)} " +
+                $"{_mainDataset.GetSingleValueOrDefault(DicomTag.StudyTime, string.Empty)}";
 
-            LeftBottomText = $"{_dataset.GetSingleValueOrDefault(DicomTag.Modality, string.Empty)}\n" +
+            LeftBottomText = $"{_mainDataset.GetSingleValueOrDefault(DicomTag.Modality, string.Empty)}\n" +
                 $"Images: {SliderValue}/{SliderMax}\n" +
-                $"Series: {_dataset.GetSingleValueOrDefault(DicomTag.SeriesNumber, string.Empty)}";
+                $"Series: {_mainDataset.GetSingleValueOrDefault(DicomTag.SeriesNumber, string.Empty)}";
 
-            RightBottomText = $"WL: {_dataset.GetSingleValueOrDefault(DicomTag.WindowCenter, 0)} " +
-                $"WW: {_dataset.GetSingleValueOrDefault(DicomTag.WindowWidth, 0)}";
+            RightBottomText = $"WL: {_mainDataset.GetSingleValueOrDefault(DicomTag.WindowCenter, 0)} " +
+                $"WW: {_mainDataset.GetSingleValueOrDefault(DicomTag.WindowWidth, 0)}";
         }
 
         private void Render()
@@ -150,12 +157,28 @@ namespace MyPACSViewer.ViewModel
             Messenger.Default.Send($"Rendered Image {SliderValue}/{SliderMax}", Properties.Resources.messageKey_status);
         }
 
-        private void OnChangeMask(bool maskMode)
+        private async void OnChangeMask(bool maskMode)
         {
             _isMaskMode = maskMode;
-            if(_isMaskMode)
+            string studyInstanceUID = _mainDataset.GetSingleValueOrDefault(DicomTag.StudyInstanceUID, string.Empty);
+            string seriesInstanceUID = _mainDataset.GetSingleValueOrDefault(DicomTag.SeriesInstanceUID, string.Empty);
+            string path = ConfigurationManager.AppSettings["mask"];
+            string seriesMaskDir = $@"{path}\{studyInstanceUID}\{seriesInstanceUID}";
+            DirectoryInfo directoryInfo = new(seriesMaskDir);
+            
+            if (_isMaskMode)
             {
+                if (!directoryInfo.Exists || !(directoryInfo.GetFiles().Length == SeriesNode.Children.Count))
+                {
+                    string host = ConfigurationManager.AppSettings["host"];
+                    int port = int.Parse(ConfigurationManager.AppSettings["port"]);
+                    string server = ConfigurationManager.AppSettings["server"];
+                    string aet = ConfigurationManager.AppSettings["aet"];
 
+                    ViewerSCU.ViewerSCU scu = new(host, port, server, aet, path);
+                    await scu.RunCGet(studyInstanceUID, seriesInstanceUID, true);
+                }
+                _maskDataset = DicomFile.Open(seriesMaskDir + $@"\{_mainDataset.GetSingleValueOrDefault(DicomTag.SOPInstanceUID, string.Empty)}").Dataset;                
             }
             RenderImage();
         }
@@ -167,7 +190,7 @@ namespace MyPACSViewer.ViewModel
 
             var query = from node in SeriesNode.Children.Values where node.Index == message.Index select node;
             FileNodeModel imageNode = query.First();
-            _dataset = DicomFile.Open(imageNode.Path).Dataset;
+            _mainDataset = DicomFile.Open(imageNode.Path).Dataset;
             Render();
         }
 
@@ -175,7 +198,7 @@ namespace MyPACSViewer.ViewModel
         {
             var query = from node in SeriesNode.Children.Values where node.Index == SliderValue select node;
             FileNodeModel imageNode = query.First();
-            _dataset = DicomFile.Open(imageNode.Path).Dataset;
+            _mainDataset = DicomFile.Open(imageNode.Path).Dataset;
             Render();
         });
     }

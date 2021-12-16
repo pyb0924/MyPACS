@@ -10,7 +10,7 @@ namespace ViewerSCU
     {
         public static async Task Main(string[] args)
         {
-            ViewerSCU scu = new("localhost", 104, "MyPACSServer", "ViewerSCU");
+            ViewerSCU scu = new("localhost", 104, "MyPACSServer", "ViewerSCU",@"\DICOM");
 
             var seriesList = await scu.RunCFind("Pei^Yibo");
             for (int i = 0; i < seriesList.Count - 1; i++)

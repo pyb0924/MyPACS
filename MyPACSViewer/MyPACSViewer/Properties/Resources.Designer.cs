@@ -61,6 +61,24 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assets/detect.png.
+        /// </summary>
+        internal static string detectIcon {
+            get {
+                return ResourceManager.GetString("detectIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Detect Nodules.
+        /// </summary>
+        internal static string detectStr {
+            get {
+                return ResourceManager.GetString("detectStr", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to dcm.
         /// </summary>
         internal static string dicomExt {
@@ -88,71 +106,11 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap file {
-            get {
-                object obj = ResourceManager.GetObject("file", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap flip_horizontal {
-            get {
-                object obj = ResourceManager.GetObject("flip_horizontal", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap flip_vertical {
-            get {
-                object obj = ResourceManager.GetObject("flip_vertical", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap focus {
-            get {
-                object obj = ResourceManager.GetObject("focus", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap folder {
-            get {
-                object obj = ResourceManager.GetObject("folder", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to View/Assets/instance.png.
         /// </summary>
         internal static string imageIcon {
             get {
                 return ResourceManager.GetString("imageIcon", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap instance {
-            get {
-                object obj = ResourceManager.GetObject("instance", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -171,6 +129,15 @@ namespace MyPACSViewer.Properties {
         internal static string messageKey_datasets {
             get {
                 return ResourceManager.GetString("messageKey_datasets", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to detect.
+        /// </summary>
+        internal static string messageKey_detect {
+            get {
+                return ResourceManager.GetString("messageKey_detect", resourceCulture);
             }
         }
         
@@ -301,16 +268,6 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap patient {
-            get {
-                object obj = ResourceManager.GetObject("patient", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to View/Assets/patient.png.
         /// </summary>
         internal static string patientIcon {
@@ -347,12 +304,11 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to Remove Nodules.
         /// </summary>
-        internal static System.Drawing.Bitmap revert {
+        internal static string removeMaskStr {
             get {
-                object obj = ResourceManager.GetObject("revert", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("removeMaskStr", resourceCulture);
             }
         }
         
@@ -366,16 +322,6 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap series {
-            get {
-                object obj = ResourceManager.GetObject("series", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to View/Assets/series.png.
         /// </summary>
         internal static string seriesIcon {
@@ -385,12 +331,11 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        ///   Looks up a localized string similar to Show Original.
         /// </summary>
-        internal static System.Drawing.Bitmap study {
+        internal static string showOriginalStr {
             get {
-                object obj = ResourceManager.GetObject("study", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
+                return ResourceManager.GetString("showOriginalStr", resourceCulture);
             }
         }
         

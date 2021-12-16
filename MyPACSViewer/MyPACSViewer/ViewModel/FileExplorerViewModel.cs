@@ -9,7 +9,7 @@ using GalaSoft.MvvmLight.Messaging;
 using GalaSoft.MvvmLight.CommandWpf;
 using FellowOakDicom;
 using MyPACSViewer.Model;
-using MyPACSViewer.Message;
+using MyPACSViewer.Utils;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -51,7 +51,7 @@ namespace MyPACSViewer.ViewModel
                 }
                 else
                 {
-                    patientNode = new(dcmDataSet.GetString(DicomTag.PatientName), Properties.Resources.patientIcon);
+                    patientNode = new(dcmDataSet.GetSingleValueOrDefault(DicomTag.PatientName, tmp), Properties.Resources.patientIcon);
                     patientNode.IsExpanded = selected;
                     _DicomDict.Add(tmp, patientNode);
                 }
@@ -63,7 +63,7 @@ namespace MyPACSViewer.ViewModel
                 }
                 else
                 {
-                    studyNode = new(dcmDataSet.GetString(DicomTag.Modality), Properties.Resources.studyIcon);
+                    studyNode = new(dcmDataSet.GetSingleValueOrDefault(DicomTag.Modality,string.Empty), Properties.Resources.studyIcon);
                     studyNode.IsExpanded = selected;
                     patientNode.Children.Add(tmp, studyNode);
                 }
@@ -75,7 +75,7 @@ namespace MyPACSViewer.ViewModel
                 }
                 else
                 {
-                    seriesNode = new(dcmDataSet.GetString(DicomTag.SeriesDescription), Properties.Resources.seriesIcon);
+                    seriesNode = new(dcmDataSet.GetSingleValueOrDefault(DicomTag.SeriesDescription,tmp), Properties.Resources.seriesIcon);
                     seriesNode.IsExpanded = selected;
                     studyNode.Children.Add(tmp, seriesNode);
                 }

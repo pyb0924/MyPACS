@@ -6,18 +6,18 @@ namespace MyPACSViewer.ViewModel
 {
     class OpenQRViewModel : ToolbarViewModel
     {
-        private QRWindow qrConfigWindow;
+        private QRWindow _qrConfigWindow;
         public OpenQRViewModel()
         {
             Source = Properties.Resources.netIcon;
             Text = Properties.Resources.QRStr;
-            qrConfigWindow = new();
+            _qrConfigWindow = new();
             Messenger.Default.Register<string>(this, Properties.Resources.messageKey_close, msg =>
             {
-                qrConfigWindow.DialogResult = false;
-                qrConfigWindow = new();
+                _qrConfigWindow.DialogResult = false;
+                _qrConfigWindow = new();
             });
         }
-        public ICommand OpenQRWindowCommand => new RelayCommand(() => qrConfigWindow.ShowDialog());
+        public ICommand OpenQRWindowCommand => new RelayCommand(() => _qrConfigWindow.ShowDialog());
     }
 }

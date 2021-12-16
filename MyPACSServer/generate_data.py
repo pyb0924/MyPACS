@@ -35,7 +35,8 @@ def insert_data_to_db(db, roots):
 def generate_record_dict(path: str):
     dataset = dcmread(path)
     values = [dataset.SOPInstanceUID, dataset.PatientName, dataset.PatientID, dataset.StudyInstanceUID,
-              dataset.Modality, dataset.BodyPartExamined, dataset.SeriesDescription, dataset.SeriesInstanceUID, path]
+              dataset.Modality, dataset.BodyPartExamined, dataset.get("SeriesDescription", "==NONE=="),
+              dataset.SeriesInstanceUID, path]
     return dict(zip(columns, values))
 
 

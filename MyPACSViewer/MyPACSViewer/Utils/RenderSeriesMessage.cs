@@ -1,6 +1,6 @@
 ﻿using MyPACSViewer.Model;
 
-namespace MyPACSViewer.Message
+namespace MyPACSViewer.Utils
 {
     class RenderSeriesMessage
     {

@@ -34,12 +34,13 @@ namespace ViewerSCU
             Client.AdditionalPresentationContexts.AddRange(pcs);
         }
 
-        public ViewerSCU(string host, int port, string serverAET, string aet)
+        public ViewerSCU(string host, int port, string serverAET, string aet,string path)
         {
             Host = host;
             Port = port;
             ServerAET = serverAET;
             Aet = aet;
+            StoragePath = path;
             Client = DicomClientFactory.Create(Host, Port, false, Aet, ServerAET);
             Client.NegotiateAsyncOps();
 

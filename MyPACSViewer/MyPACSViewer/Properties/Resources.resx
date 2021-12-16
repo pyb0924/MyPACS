@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="detectIcon" xml:space="preserve">
+    <value>Assets/detect.png</value>
+  </data>
+  <data name="detectStr" xml:space="preserve">
+    <value>Detect Nodules</value>
+  </data>
   <data name="dicomExt" xml:space="preserve">
     <value>dcm</value>
   </data>
@@ -126,33 +132,17 @@
   <data name="exitStr" xml:space="preserve">
     <value>Exit App</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="file" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\file.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="flip_horizontal" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\flip-horizontal.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="flip_vertical" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\flip-vertical.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="focus" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\focus.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="folder" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\folder.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="imageIcon" xml:space="preserve">
     <value>View/Assets/instance.png</value>
-  </data>
-  <data name="instance" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\instance.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="messageKey_close" xml:space="preserve">
     <value>close</value>
   </data>
   <data name="messageKey_datasets" xml:space="preserve">
     <value>datasets</value>
+  </data>
+  <data name="messageKey_detect" xml:space="preserve">
+    <value>detect</value>
   </data>
   <data name="messageKey_file" xml:space="preserve">
     <value>file</value>
@@ -196,9 +186,6 @@
   <data name="openFolderStr" xml:space="preserve">
     <value>Open Folder</value>
   </data>
-  <data name="patient" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\patient.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="patientIcon" xml:space="preserve">
     <value>View/Assets/patient.png</value>
   </data>
@@ -211,20 +198,17 @@
   <data name="QRStr" xml:space="preserve">
     <value>Query/Retrieve</value>
   </data>
-  <data name="revert" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\revert.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="removeMaskStr" xml:space="preserve">
+    <value>Remove Nodules</value>
   </data>
   <data name="revertAllStr" xml:space="preserve">
     <value>Revert All</value>
   </data>
-  <data name="series" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\series.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="seriesIcon" xml:space="preserve">
     <value>View/Assets/series.png</value>
   </data>
-  <data name="study" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\view\assets\study.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="showOriginalStr" xml:space="preserve">
+    <value>Show Original</value>
   </data>
   <data name="studyIcon" xml:space="preserve">
     <value>View/Assets/study.png</value>

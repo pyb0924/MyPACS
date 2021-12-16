@@ -7,12 +7,12 @@ using GalaSoft.MvvmLight;
 using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using MyPACSViewer.Model;
+using MyPACSViewer.Utils;
 
 namespace MyPACSViewer.ViewModel
 {
     class QRViewModel : ViewModelBase
     {
-        public string StorageRoot { get; set; }
 
         private List<string> _searchFieldList = new()
         {
@@ -76,16 +76,11 @@ namespace MyPACSViewer.ViewModel
             int port = int.Parse(ConfigurationManager.AppSettings["port"]);
             string server = ConfigurationManager.AppSettings["server"];
             string aet = ConfigurationManager.AppSettings["aet"];
-            StorageRoot = ConfigurationManager.AppSettings["storage"];
-            scu = new(host, port, server, aet);
+            string path = ConfigurationManager.AppSettings["image"];
+            scu = new(host, port, server, aet, path);
             _findResultList = new();
         }
 
-        private static string GetTimestamp()
-        {
-            TimeSpan ts = DateTime.UtcNow - new DateTime(1970, 1, 1, 0, 0, 0, 0);
-            return Convert.ToInt64(ts.TotalMilliseconds).ToString();
-        }
 
         public ICommand FindCommand => new RelayCommand(async () =>
         {
@@ -102,15 +97,13 @@ namespace MyPACSViewer.ViewModel
         {
             if (FindResultList.Count != 0)
             {
-                string storagePath = @".\" + StorageRoot + @".\" + GetTimestamp();
-                scu.StoragePath = storagePath;
                 Messenger.Default.Send($"Retrieving Files...", Properties.Resources.messageKey_status);
                 foreach (var result in FindResultList)
                 {
                     await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
                 }
-                Messenger.Default.Send(storagePath, Properties.Resources.messageKey_folder);
-                Messenger.Default.Send($"{FindResultList.Count} Series Retrieved",Properties.Resources.messageKey_status);
+                Messenger.Default.Send(scu.StoragePath, Properties.Resources.messageKey_folder);
+                Messenger.Default.Send($"{FindResultList.Count} Series Retrieved", Properties.Resources.messageKey_status);
             }
 
             Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
@@ -120,8 +113,6 @@ namespace MyPACSViewer.ViewModel
         {
             if (FindResultList.Count != 0)
             {
-                string storagePath = @".\" + StorageRoot + @".\" + GetTimestamp();
-                scu.StoragePath = storagePath;
                 int seriesCount = 0;
                 Messenger.Default.Send($"Retrieving Files...", Properties.Resources.messageKey_status);
                 foreach (var result in FindResultList)
@@ -132,7 +123,7 @@ namespace MyPACSViewer.ViewModel
                         await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
                     }
                 }
-                Messenger.Default.Send(storagePath, Properties.Resources.messageKey_folder);
+                Messenger.Default.Send(scu.StoragePath, Properties.Resources.messageKey_folder);
                 Messenger.Default.Send($"{seriesCount} Series Retrieved", Properties.Resources.messageKey_status);
             }
             Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
