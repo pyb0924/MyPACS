@@ -1,10 +1,11 @@
 import records
 from sqlalchemy.exc import ResourceClosedError
+import logging
 
 
 class MyPACSdatabase(records.Database):
     def __init__(self, db_config):
-        connect_str = f"mysql+pymysql://{db_config['username']}:{db_config['password']}" \
+        connect_str = f"{db_config['dbtype']}://{db_config['username']}:{db_config['password']}" \
                       f"@{db_config['host']}:{db_config['port']}/{db_config['name']}"
         super().__init__(connect_str)
 
@@ -12,10 +13,12 @@ class MyPACSdatabase(records.Database):
         try:
             self.query(query, **kwargs)
         except ResourceClosedError:
-            pass
+            logger = logging.getLogger('MyPACSLogger')
+            logger.warning("Query return no results")
 
     def query_file_return_none(self, query_file: str, **kwargs):
         try:
             self.query_file(query_file, fetchall=True, **kwargs)
         except ResourceClosedError:
-            pass
+            logger = logging.getLogger('MyPACSLogger')
+            logger.warning("Query return no results")

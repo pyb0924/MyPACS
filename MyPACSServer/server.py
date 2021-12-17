@@ -159,7 +159,9 @@ class MyPACSServer(AE):
                     server.logger.error(f'No XML file found at {row["file_path"]}')
                     yield 0xAA04, None
                 res_dataset = get_mask(res_dataset, xml_path)
+                server.logger.debug(f'C-GET [mask] from {row["file_path"]}')
             else:
-                server.logger.debug(f'running C-GET from {row["file_path"]}')
-                # Pending
-                yield 0xFF00, res_dataset
+                server.logger.debug(f'C-GET [image] from {row["file_path"]}')
+
+            # Pending
+            yield 0xFF00, res_dataset

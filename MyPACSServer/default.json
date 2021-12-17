@@ -4,9 +4,10 @@
     "ae_title": "MyPACSServer"
   },
   "database": {
+    "dbtype": "dbtype",
     "host": "localhost",
-    "port": "3306",
-    "name": "mypacs",
+    "port": "port",
+    "name": "dbname",
     "username": "username",
     "password": "password"
   },
