@@ -46,7 +46,7 @@ class MyPACSServer(AE):
 
     def run(self):
         self.logger.debug(f'Server running at port {self.port}, AE title: {str(self.ae_title, encoding="utf-8")}')
-        self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers)
+        self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers,block=True)
 
     def handle_find_wrapper(self):
         return partial(self.handle_find, server=self)
@@ -95,7 +95,6 @@ class MyPACSServer(AE):
                 rows_dict_list = find_rows.as_dict()
                 server.logger.debug(f'C-Find: found {len(rows_dict_list)} results in database')
 
-        # TODO check len(rows_dict_list)==0
         for row in rows_dict_list:
             # Check if C-CANCEL has been received
             if event.is_cancelled:
@@ -157,7 +156,7 @@ class MyPACSServer(AE):
                 xml_path = next(Path(row['file_path']).parent.glob("*.xml"))
                 if xml_path is None:
                     server.logger.error(f'No XML file found at {row["file_path"]}')
-                    yield 0xAA04, None
+                    yield 0xAA02, None
                 res_dataset = get_mask(res_dataset, xml_path)
                 server.logger.debug(f'C-GET [mask] from {row["file_path"]}')
             else:

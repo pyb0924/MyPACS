@@ -8,6 +8,7 @@ using GalaSoft.MvvmLight.CommandWpf;
 using GalaSoft.MvvmLight.Messaging;
 using MyPACSViewer.Model;
 using MyPACSViewer.Utils;
+using System.Threading.Tasks;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -86,47 +87,83 @@ namespace MyPACSViewer.ViewModel
         {
             bool useID = SelectedSearchField == Properties.Resources.patientIDStr;
             _findResultList.Clear();
-            var findDatasetList = await scu.RunCFind(SearchText, useID);
-            for (int i = 0; i < findDatasetList.Count - 1; i++)
+            try
             {
-                _findResultList.Add(new QRListItem(findDatasetList[i]));
+                var findDatasetList = await scu.RunCFind(SearchText, useID);
+                for (int i = 0; i < findDatasetList.Count - 1; i++)
+                {
+                    _findResultList.Add(new QRListItem(findDatasetList[i]));
+                }
+                Messenger.Default.Send($"C-Find Completed: Found {findDatasetList.Count - 1} Series in DB",
+                    Properties.Resources.messageKey_status);
             }
+            catch (Exception ex)
+            {
+                Messenger.Default.Send("Run C-Find Failed: " + ex.Message, Properties.Resources.messageKey_status);
+            }
+
         });
 
         public ICommand GetAllCommand => new RelayCommand(async () =>
         {
-            if (FindResultList.Count != 0)
+            if (FindResultList.Count == 0)
+            {
+                Messenger.Default.Send("Empty Series List to Run C-Find", Properties.Resources.messageKey_status);
+                return;
+            }
+            
+            try
             {
                 Messenger.Default.Send($"Retrieving Files...", Properties.Resources.messageKey_status);
+                //List<Task<string>> CGetTaskList = new();
+                //foreach (var result in FindResultList)
+                //{
+                //    CGetTaskList.Add(scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID));
+                //}
+                //List<string> seriesPathList = new(await Task.WhenAll(CGetTaskList));
+                List<string> seriesPathList = new();
                 foreach (var result in FindResultList)
                 {
-                    await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
+                    seriesPathList.Add(await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID));
                 }
-                Messenger.Default.Send(scu.StoragePath, Properties.Resources.messageKey_folder);
-                Messenger.Default.Send($"{FindResultList.Count} Series Retrieved", Properties.Resources.messageKey_status);
+
+                Messenger.Default.Send(seriesPathList, Properties.Resources.messageKey_series);
+                Messenger.Default.Send($"{seriesPathList.Count} Series Retrieved", Properties.Resources.messageKey_status);
+                Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
+            }
+            catch (Exception ex)
+            {
+                Messenger.Default.Send("Run C-Get Failed: " + ex.Message, Properties.Resources.messageKey_status);
             }
 
-            Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
         });
 
         public ICommand GetSelectedCommand => new RelayCommand(async () =>
         {
-            if (FindResultList.Count != 0)
+            if (FindResultList.Count == 0)
             {
-                int seriesCount = 0;
+                Messenger.Default.Send("Error: Empty Series List to Run C-Find", Properties.Resources.messageKey_status);
+                return;
+            }
+            try
+            {
                 Messenger.Default.Send($"Retrieving Files...", Properties.Resources.messageKey_status);
+                List<string> seriesPathList = new();
                 foreach (var result in FindResultList)
                 {
                     if (result.IsSelected)
                     {
-                        seriesCount++;
-                        await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID);
+                        seriesPathList.Add(await scu.RunCGet(result.StudyInstanceUID, result.SeriesInstanceUID));
                     }
                 }
-                Messenger.Default.Send(scu.StoragePath, Properties.Resources.messageKey_folder);
-                Messenger.Default.Send($"{seriesCount} Series Retrieved", Properties.Resources.messageKey_status);
+                Messenger.Default.Send(seriesPathList, Properties.Resources.messageKey_series);
+                Messenger.Default.Send($"{seriesPathList.Count} Series Retrieved", Properties.Resources.messageKey_status);
+                Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
             }
-            Messenger.Default.Send("Close", Properties.Resources.messageKey_close);
+            catch (Exception ex)
+            {
+                Messenger.Default.Send("Run C-Get Failed: " + ex.Message, Properties.Resources.messageKey_status);
+            }
         });
 
         public ICommand CancelCommand => new RelayCommand(() => Messenger.Default.Send("Close", Properties.Resources.messageKey_close));

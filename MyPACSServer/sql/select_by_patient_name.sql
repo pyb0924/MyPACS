@@ -1,3 +1,9 @@
-SELECT DISTINCT patient_name,patient_id,study_instance_uid,modality,body_part_examined,series_description,series_instance_uid
+SELECT DISTINCT patient_name,
+                patient_id,
+                study_instance_uid,
+                modality,
+                body_part_examined,
+                series_description,
+                series_instance_uid
 FROM mypacs_test
-WHERE patient_name = :patient_name
+WHERE patient_name LIKE CONCAT('%', :patient_name, '%')

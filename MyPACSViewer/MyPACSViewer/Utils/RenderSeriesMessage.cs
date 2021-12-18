@@ -5,12 +5,12 @@ namespace MyPACSViewer.Utils
     class RenderSeriesMessage
     {
         public FileNodeModel SeriesNode { get; set; }
-        public int Index { get; set; }
+        public string  SOPInstanceUID { get; set; }
 
-        public RenderSeriesMessage(FileNodeModel seriesNode,int index)
+        public RenderSeriesMessage(FileNodeModel seriesNode,string sopuid)
         {
             SeriesNode = seriesNode;
-            Index = index;
+            SOPInstanceUID = sopuid;
         }
     }
 }

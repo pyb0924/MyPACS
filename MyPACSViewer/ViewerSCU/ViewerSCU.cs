@@ -34,7 +34,7 @@ namespace ViewerSCU
             Client.AdditionalPresentationContexts.AddRange(pcs);
         }
 
-        public ViewerSCU(string host, int port, string serverAET, string aet,string path)
+        public ViewerSCU(string host, int port, string serverAET, string aet, string path)
         {
             Host = host;
             Port = port;
@@ -67,21 +67,35 @@ namespace ViewerSCU
             return resDatasetList;
         }
 
-        public async Task RunCGet(string studyInstanceUID, string seriesInstanceUID, bool isMask = false)
+        public async Task<string> RunCGet(string studyInstanceUID, string seriesInstanceUID, bool isMask = false)
         {
             DicomCGetRequest request = new(studyInstanceUID, seriesInstanceUID);
             if (isMask)
             {
                 request.Dataset.AddOrUpdate(DicomTag.Modality, "mask");
             }
+
+            var seriesPath = Path.GetFullPath(StoragePath);
+            seriesPath = Path.Combine(seriesPath, studyInstanceUID);
+            if (!Directory.Exists(seriesPath))
+            {
+                Directory.CreateDirectory(seriesPath);
+            }
+            seriesPath = Path.Combine(seriesPath, seriesInstanceUID);
+            if (!Directory.Exists(seriesPath))
+            {
+                Directory.CreateDirectory(seriesPath);
+            }
+            
             Client.OnCStoreRequest += (DicomCStoreRequest req) =>
             {
                 Console.WriteLine(DateTime.Now.ToString() + $"{req.Dataset.GetSingleValue<string>(DicomTag.SOPInstanceUID)} received");
-                SaveImage(req.Dataset);
+                SaveImage(req.Dataset,seriesPath);
                 return Task.FromResult(new DicomCStoreResponse(req, DicomStatus.Success));
             };
             await Client.AddRequestAsync(request);
             await Client.SendAsync();
+            return seriesPath;
         }
 
         private static DicomCFindRequest CreateFindRequestByPatientName(string patientName)
@@ -131,27 +145,10 @@ namespace ViewerSCU
             }
         }
 
-        private void SaveImage(DicomDataset dataset)
+        private void SaveImage(DicomDataset dataset,string path)
         {
-            var studyUID = dataset.GetSingleValue<string>(DicomTag.StudyInstanceUID).Trim();
-            var seriesUID = dataset.GetSingleValue<string>(DicomTag.SeriesInstanceUID).Trim();
             var sopUID = dataset.GetSingleValue<string>(DicomTag.SOPInstanceUID).Trim();
-            var path = Path.GetFullPath(StoragePath);
-
-            path = Path.Combine(path, studyUID);
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-            path = Path.Combine(path, seriesUID);
-
-            if (!Directory.Exists(path))
-            {
-                Directory.CreateDirectory(path);
-            }
-
-            path = Path.Combine(path, sopUID) + ".dcm";
-            new DicomFile(dataset).Save(path);
+            new DicomFile(dataset).Save(Path.Combine(path, sopUID) + ".dcm");
         }
     }
 }

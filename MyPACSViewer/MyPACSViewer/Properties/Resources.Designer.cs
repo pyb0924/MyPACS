@@ -178,6 +178,15 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to series.
+        /// </summary>
+        internal static string messageKey_series {
+            get {
+                return ResourceManager.GetString("messageKey_series", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to seriesIndex.
         /// </summary>
         internal static string messageKey_seriesIndex {
@@ -210,6 +219,15 @@ namespace MyPACSViewer.Properties {
         internal static string netIcon {
             get {
                 return ResourceManager.GetString("netIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to No Series Description.
+        /// </summary>
+        internal static string noSeriesDescriptionStr {
+            get {
+                return ResourceManager.GetString("noSeriesDescriptionStr", resourceCulture);
             }
         }
         

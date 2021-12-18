@@ -156,6 +156,9 @@
   <data name="messageKey_selectedChange" xml:space="preserve">
     <value>selectedChange</value>
   </data>
+  <data name="messageKey_series" xml:space="preserve">
+    <value>series</value>
+  </data>
   <data name="messageKey_seriesIndex" xml:space="preserve">
     <value>seriesIndex</value>
   </data>
@@ -167,6 +170,9 @@
   </data>
   <data name="netIcon" xml:space="preserve">
     <value>Assets/net.png</value>
+  </data>
+  <data name="noSeriesDescriptionStr" xml:space="preserve">
+    <value>No Series Description</value>
   </data>
   <data name="openFileDialogFilter" xml:space="preserve">
     <value>DICOM Files|*.dcm</value>

@@ -10,12 +10,13 @@ using GalaSoft.MvvmLight.CommandWpf;
 using FellowOakDicom;
 using MyPACSViewer.Model;
 using MyPACSViewer.Utils;
+using System.Linq;
 
 namespace MyPACSViewer.ViewModel
 {
     class FileExplorerViewModel : ViewModelBase
     {
-        private readonly SortedDictionary<string, FileNodeModel> _DicomDict = new();
+        private readonly Dictionary<string, FileNodeModel> _DicomDict = new();
         private ObservableCollection<FileNodeModel> _fileTreeDataList;
         public ObservableCollection<FileNodeModel> FileTreeDataList
         {
@@ -29,8 +30,21 @@ namespace MyPACSViewer.ViewModel
 
         public FileExplorerViewModel()
         {
-            Messenger.Default.Register<string>(this, Properties.Resources.messageKey_file, GenerateFromFile);
-            Messenger.Default.Register<string>(this, Properties.Resources.messageKey_folder, GenerateFromFolder);
+            Messenger.Default.Register<string>(this, Properties.Resources.messageKey_file, async (file) =>
+            {
+                _DicomDict.Clear();
+                await GenerateFromFile(file);
+            });
+            Messenger.Default.Register<string>(this, Properties.Resources.messageKey_folder, async (folder) =>
+            {
+                _DicomDict.Clear();
+                await GenerateFromFolder(folder);
+            });
+            Messenger.Default.Register<List<string>>(this, Properties.Resources.messageKey_series, async (folders) =>
+            {
+                _DicomDict.Clear();
+                await GenerateFromSeries(folders);
+            });
         }
 
         private async Task<bool> AddToDicomDict(FileInfo file, bool selected)
@@ -63,7 +77,7 @@ namespace MyPACSViewer.ViewModel
                 }
                 else
                 {
-                    studyNode = new(dcmDataSet.GetSingleValueOrDefault(DicomTag.Modality,string.Empty), Properties.Resources.studyIcon);
+                    studyNode = new(dcmDataSet.GetSingleValueOrDefault(DicomTag.Modality, string.Empty), Properties.Resources.studyIcon);
                     studyNode.IsExpanded = selected;
                     patientNode.Children.Add(tmp, studyNode);
                 }
@@ -75,7 +89,8 @@ namespace MyPACSViewer.ViewModel
                 }
                 else
                 {
-                    seriesNode = new(dcmDataSet.GetSingleValueOrDefault(DicomTag.SeriesDescription,tmp), Properties.Resources.seriesIcon);
+                    seriesNode = new(dcmDataSet.GetSingleValueOrDefault(DicomTag.SeriesDescription,
+                        Properties.Resources.noSeriesDescriptionStr), Properties.Resources.seriesIcon);
                     seriesNode.IsExpanded = selected;
                     studyNode.Children.Add(tmp, seriesNode);
                 }
@@ -87,8 +102,8 @@ namespace MyPACSViewer.ViewModel
                 }
                 else
                 {
-                    index = seriesNode.Children.Count;
-                    imageNode = new(file.Name, Properties.Resources.imageIcon, file.FullName, index);
+                    imageNode = new(file.Name, Properties.Resources.imageIcon, file.FullName,
+                        dcmDataSet.GetSingleValueOrDefault(DicomTag.InstanceNumber, 0));
                     imageNode.IsSelected = selected;
                     seriesNode.Children.Add(tmp, imageNode);
                 }
@@ -100,9 +115,8 @@ namespace MyPACSViewer.ViewModel
             return true;
         }
 
-        private async void GenerateFromFile(string file)
+        private async Task GenerateFromFile(string file)
         {
-            _DicomDict.Clear();
             FileInfo fileInfo = new(file);
             if (await AddToDicomDict(fileInfo, true))
             {
@@ -115,24 +129,53 @@ namespace MyPACSViewer.ViewModel
             }
         }
 
-        private async void GenerateFromFolder(string folder)
+        private async Task GenerateFromFolder(string folder)
         {
-            _DicomDict.Clear();
             DirectoryInfo dir = new(folder);
             FileInfo[] files = dir.GetFiles("*.dcm", SearchOption.AllDirectories);
             int fileCount = 0;
-            bool isFirst = true;
+            
+            var openFileTaskList = new List<Task<bool>>();
+
             foreach (var file in files)
             {
-                if (await AddToDicomDict(file, isFirst))
+                openFileTaskList.Add(AddToDicomDict(file, false));
+            }
+
+            while (openFileTaskList.Count > 0)
+            {
+                Task<bool> finishedTask = await Task.WhenAny(openFileTaskList);
+                if (finishedTask.Result)
                 {
                     fileCount++;
                 }
-                isFirst = false;
+                openFileTaskList.Remove(finishedTask);
             }
+
+            foreach (var patientNode in _DicomDict.Values)
+            {
+                foreach (var studyNode in patientNode.Children.Values)
+                {
+                    foreach (var seriesNode in studyNode.Children.Values)
+                    {
+                        seriesNode.Children = seriesNode.Children.OrderBy(item => item.Value.Index).ToDictionary(item => item.Key, item => item.Value);
+                    }
+                }
+            }
+
             FileTreeDataList = new(_DicomDict.Values);
             Messenger.Default.Send($"Open {fileCount} Files Successfully! " +
                 $"Total: {files.Length} Files", Properties.Resources.messageKey_status);
+        }
+
+        private async Task GenerateFromSeries(List<string> folders)
+        {
+            List<Task> openSeriesTaskList = new();
+            foreach (var folder in folders)
+            {
+                openSeriesTaskList.Add(GenerateFromFolder(folder));
+            }
+            await Task.WhenAll(openSeriesTaskList);
         }
 
         public ICommand SelectedItemChangedCommand => new RelayCommand<FileNodeModel>((selectedItem) =>
@@ -146,7 +189,7 @@ namespace MyPACSViewer.ViewModel
                 .Children[dataset.GetString(DicomTag.StudyInstanceUID)]
                 .Children[dataset.GetString(DicomTag.SeriesInstanceUID)];
 
-            RenderSeriesMessage message = new(seriesNode, selectedItem.Index);
+            RenderSeriesMessage message = new(seriesNode, dataset.GetString(DicomTag.SOPInstanceUID));
 
             Messenger.Default.Send(message, Properties.Resources.messageKey_selectedChange);
         });

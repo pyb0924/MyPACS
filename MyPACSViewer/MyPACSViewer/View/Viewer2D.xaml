@@ -13,7 +13,7 @@
         <vm:Viewer2DViewModel/>
     </DockPanel.DataContext>
 
-    <Slider DockPanel.Dock="Bottom" Margin="10,0,10,10" Minimum="1" 
+    <Slider DockPanel.Dock="Bottom" Margin="10,0,10,10" Minimum="{Binding SliderMin}" 
             Maximum="{Binding SliderMax}" Value="{Binding SliderValue}">
         <i:Interaction.Triggers>
             <i:EventTrigger EventName="ValueChanged">
