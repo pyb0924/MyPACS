@@ -5,9 +5,10 @@ from pydicom import dcmread
 import click
 from progress.bar import Bar
 
-from utils import config_root
 from database import MyPACSdatabase
 
+
+config_root = r'./config.json'
 columns = ['sop_instance_uid', 'patient_name', 'patient_id', 'study_instance_uid', 'modality', 'body_part_examined',
            'series_description', 'series_instance_uid', 'local_file_path']
 

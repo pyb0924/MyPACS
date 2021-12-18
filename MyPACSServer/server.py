@@ -46,7 +46,7 @@ class MyPACSServer(AE):
 
     def run(self):
         self.logger.debug(f'Server running at port {self.port}, AE title: {str(self.ae_title, encoding="utf-8")}')
-        self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers,block=True)
+        self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers)
 
     def handle_find_wrapper(self):
         return partial(self.handle_find, server=self)

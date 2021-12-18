@@ -1,6 +1,6 @@
 from server import MyPACSServer
-from utils import config_root
 
 if __name__ == '__main__':
+    config_root = r'./config.json'
     server = MyPACSServer(config_root)
     server.run()
