@@ -10,6 +10,7 @@ using MyPACSViewer.Model;
 using MyPACSViewer.Utils;
 using System.Configuration;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -17,8 +18,7 @@ namespace MyPACSViewer.ViewModel
     {
         public FileNodeModel SeriesNode { get; set; }
         private DicomDataset _mainDataset;
-        private DicomDataset _maskDataset;
-        private bool _isMaskMode;
+        private bool _isOverlayMode;
 
         #region Properties
         private WriteableBitmap _mainImage;
@@ -29,17 +29,6 @@ namespace MyPACSViewer.ViewModel
             {
                 _mainImage = value;
                 RaisePropertyChanged(() => MainImage);
-            }
-        }
-
-        private WriteableBitmap _maskImage;
-        public WriteableBitmap MaskImage
-        {
-            get => _maskImage;
-            set
-            {
-                _maskImage = value;
-                RaisePropertyChanged(() => MaskImage);
             }
         }
 
@@ -125,19 +114,18 @@ namespace MyPACSViewer.ViewModel
         public Viewer2DViewModel()
         {
             new DicomSetupBuilder().RegisterServices(s => s.AddImageManager<WPFImageManager>()).Build();
-            Messenger.Default.Register<RenderSeriesMessage>(this, Properties.Resources.messageKey_selectedChange, OnSeriesChange);
-            Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_detect, OnChangeMask);
-            _isMaskMode = false;
+            Messenger.Default.Register<RenderSeriesMessage>(this, Properties.Resources.messageKey_selectedChange, OnSelectedChange);
+            Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_detect, OnChangeOverlayMode);
+            _isOverlayMode = false;
         }
 
         private void RenderImage()
         {
             DicomImage image = new(_mainDataset);
-            if (_isMaskMode)
-            {
-            }
+            image.ShowOverlays = _isOverlayMode;
             MainImage = image.RenderImage().As<WriteableBitmap>();
-
+            Messenger.Default.Send($"Rendered Image {SliderValue - SliderMin + 1}/{SliderMax - SliderMin + 1}, " +
+                $"Overlay Mode={_isOverlayMode}", Properties.Resources.messageKey_status);
         }
 
         private void RenderCornerInfo()
@@ -163,35 +151,49 @@ namespace MyPACSViewer.ViewModel
         {
             RenderImage();
             RenderCornerInfo();
-            Messenger.Default.Send($"Rendered Image {SliderValue}/{SliderMax}", Properties.Resources.messageKey_status);
         }
 
-        private async void OnChangeMask(bool maskMode)
+        private async Task GetDatasetWithOverlay()
         {
-            _isMaskMode = maskMode;
             string studyInstanceUID = _mainDataset.GetSingleValueOrDefault(DicomTag.StudyInstanceUID, string.Empty);
             string seriesInstanceUID = _mainDataset.GetSingleValueOrDefault(DicomTag.SeriesInstanceUID, string.Empty);
-            string path = ConfigurationManager.AppSettings["mask"];
-            string seriesMaskDir = $@"{path}\{studyInstanceUID}\{seriesInstanceUID}";
-            DirectoryInfo directoryInfo = new(seriesMaskDir);
+            string sopInstanceUID = _mainDataset.GetSingleValueOrDefault(DicomTag.SOPInstanceUID, string.Empty);
+            string overlayRoot = ConfigurationManager.AppSettings["overlay"];
+            string filePath = $@"{overlayRoot}\{studyInstanceUID}\{seriesInstanceUID}\{sopInstanceUID + Properties.Resources.dicomExt}";
+            FileInfo fileInfo = new(filePath);
 
-            if (_isMaskMode)
+            if (!fileInfo.Exists)
             {
-                if (!directoryInfo.Exists || !(directoryInfo.GetFiles().Length == SeriesNode.Children.Count))
-                {
-                    string host = ConfigurationManager.AppSettings["host"];
-                    int port = int.Parse(ConfigurationManager.AppSettings["port"]);
-                    string server = ConfigurationManager.AppSettings["server"];
-                    string aet = ConfigurationManager.AppSettings["aet"];
+                string host = ConfigurationManager.AppSettings["host"];
+                int port = int.Parse(ConfigurationManager.AppSettings["port"]);
+                string server = ConfigurationManager.AppSettings["server"];
+                string aet = ConfigurationManager.AppSettings["aet"];
 
-                    ViewerSCU.ViewerSCU scu = new(host, port, server, aet, path);
-                    await scu.RunCGet(studyInstanceUID, seriesInstanceUID, true);
-                }
-                _maskDataset = DicomFile.Open(seriesMaskDir + $@"\{_mainDataset.GetSingleValueOrDefault(DicomTag.SOPInstanceUID, string.Empty)}").Dataset;
+                ViewerSCU.ViewerSCU scu = new(host, port, server, aet, overlayRoot);
+                Messenger.Default.Send("Retriving Overlay Data from Server...", Properties.Resources.messageKey_status);
+                await scu.RunCGet(studyInstanceUID, seriesInstanceUID, true);
+
             }
+            _mainDataset = DicomFile.Open(filePath).Dataset;
+        }
+
+        private async void OnChangeOverlayMode(bool overlayMode)
+        {
+            if (_mainDataset is null)
+            {
+                Messenger.Default.Send("No Image Rendered!", Properties.Resources.messageKey_status);
+                return;
+            }
+            _isOverlayMode = overlayMode;
+            string overlayType = _mainDataset.GetSingleValueOrDefault(DicomTag.OverlayType, string.Empty);
+            if (_isOverlayMode && string.IsNullOrEmpty(overlayType))
+            {
+                await GetDatasetWithOverlay();
+            }
+            Messenger.Default.Send(_isOverlayMode, Properties.Resources.messageKey_overlayModeChanged);
             RenderImage();
         }
-        private void OnSeriesChange(RenderSeriesMessage message)
+        private async void OnSelectedChange(RenderSeriesMessage message)
         {
             SeriesNode = message.SeriesNode;
             var imageNode = SeriesNode.Children[message.SOPInstanceUID];
@@ -201,7 +203,12 @@ namespace MyPACSViewer.ViewModel
             if (SliderValue == imageNode.Index)
             {
                 _mainDataset = DicomFile.Open(imageNode.Path).Dataset;
+                if (_isOverlayMode)
+                {
+                    await GetDatasetWithOverlay();
+                }
                 Render();
+                Messenger.Default.Send(_isOverlayMode, Properties.Resources.messageKey_overlayModeChanged);
             }
             else
             {
@@ -209,7 +216,7 @@ namespace MyPACSViewer.ViewModel
             }
         }
 
-        public ICommand IndexChangeCommand => new RelayCommand(() =>
+        public ICommand IndexChangeCommand => new RelayCommand(async () =>
         {
             if (SliderMax - SliderMin + 1 != SeriesNode.Children.Count)
             {
@@ -218,6 +225,10 @@ namespace MyPACSViewer.ViewModel
             var query = from node in SeriesNode.Children.Values where node.Index == SliderValue select node;
             FileNodeModel imageNode = query.First();
             _mainDataset = DicomFile.Open(imageNode.Path).Dataset;
+            if (_isOverlayMode)
+            {
+                await GetDatasetWithOverlay();
+            }
             Render();
         });
     }

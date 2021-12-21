@@ -79,7 +79,7 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to dcm.
+        ///   Looks up a localized string similar to .dcm.
         /// </summary>
         internal static string dicomExt {
             get {
@@ -111,6 +111,15 @@ namespace MyPACSViewer.Properties {
         internal static string imageIcon {
             get {
                 return ResourceManager.GetString("imageIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assets/lung.png.
+        /// </summary>
+        internal static string lungIcon {
+            get {
+                return ResourceManager.GetString("lungIcon", resourceCulture);
             }
         }
         
@@ -165,6 +174,15 @@ namespace MyPACSViewer.Properties {
         internal static string messageKey_indexChange {
             get {
                 return ResourceManager.GetString("messageKey_indexChange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to overlayModeChanged.
+        /// </summary>
+        internal static string messageKey_overlayModeChanged {
+            get {
+                return ResourceManager.GetString("messageKey_overlayModeChanged", resourceCulture);
             }
         }
         
@@ -324,9 +342,9 @@ namespace MyPACSViewer.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Remove Nodules.
         /// </summary>
-        internal static string removeMaskStr {
+        internal static string removeOverlayStr {
             get {
-                return ResourceManager.GetString("removeMaskStr", resourceCulture);
+                return ResourceManager.GetString("removeOverlayStr", resourceCulture);
             }
         }
         

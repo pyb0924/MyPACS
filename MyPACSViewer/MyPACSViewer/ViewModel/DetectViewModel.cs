@@ -9,22 +9,26 @@ using GalaSoft.MvvmLight.Messaging;
 
 namespace MyPACSViewer.ViewModel
 {
-    class DetectViewModel:ToolbarViewModel
+    class DetectViewModel : ToolbarViewModel
     {
-        private bool _isMaskMode;
+        private bool _isOverlayMode;
         public DetectViewModel()
         {
             Source = Properties.Resources.detectIcon;
             Text = Properties.Resources.detectStr;
-            _isMaskMode = false;
+            _isOverlayMode = false;
+            Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_overlayModeChanged, mode =>
+            {
+                _isOverlayMode = mode;
+                SyncViewWithMode();
+            });
         }
 
-        public ICommand ToggleMaskCommand => new RelayCommand(() =>
+        private void SyncViewWithMode()
         {
-            _isMaskMode = !_isMaskMode;
-            if(_isMaskMode)
+            if (_isOverlayMode)
             {
-                Source = Properties.Resources.imageIcon;
+                Source = Properties.Resources.lungIcon;
                 Text = Properties.Resources.showOriginalStr;
             }
             else
@@ -32,7 +36,11 @@ namespace MyPACSViewer.ViewModel
                 Source = Properties.Resources.detectIcon;
                 Text = Properties.Resources.detectStr;
             }
-            Messenger.Default.Send(_isMaskMode, Properties.Resources.messageKey_detect);
+        }
+
+        public ICommand ToggleOverlayCommand => new RelayCommand(() =>
+        {
+            Messenger.Default.Send(!_isOverlayMode, Properties.Resources.messageKey_detect);
         });
     }
 }

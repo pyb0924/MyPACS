@@ -27,6 +27,7 @@
     <None Remove="View\Assets\grid-four.svg" />
     <None Remove="View\Assets\icon.ico" />
     <None Remove="View\Assets\instance.png" />
+    <None Remove="View\Assets\lung.png" />
     <None Remove="View\Assets\MicroDicom.ico" />
     <None Remove="View\Assets\net.png" />
     <None Remove="View\Assets\patient.png" />
@@ -64,6 +65,7 @@
     <Resource Include="icon.ico" />
     <Resource Include="View\Assets\folder.png" />
     <Resource Include="View\Assets\instance.png" />
+    <Resource Include="View\Assets\lung.png" />
     <Resource Include="View\Assets\net.png" />
     <Resource Include="View\Assets\patient.png" />
     <Resource Include="View\Assets\revert.png" />

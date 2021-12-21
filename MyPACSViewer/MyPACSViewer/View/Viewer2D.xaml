@@ -29,7 +29,6 @@
             <TextBlock Foreground="Gainsboro" FontFamily="Consolas" FontSize="18" TextAlignment="Left" Canvas.Left="10" Canvas.Bottom="10" Text="{Binding LeftBottomText}"/>
             <TextBlock Foreground="Gainsboro" FontFamily="Consolas" FontSize="18" TextAlignment="Right" Canvas.Right="10" Canvas.Top="10" Text="{Binding RightTopText}"/>
             <TextBlock Foreground="Gainsboro" FontFamily="Consolas" FontSize="18" TextAlignment="Right" Canvas.Right="10" Canvas.Bottom="10" Text="{Binding RightBottomText}"/>
-            <Image x:Name="MaskImage" Source="{Binding MaskImage}"/>
         </Canvas>
     </Grid>
     

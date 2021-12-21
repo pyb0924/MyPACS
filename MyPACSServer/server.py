@@ -150,17 +150,18 @@ class MyPACSServer(AE):
                 yield 0xFE00, None
                 return
 
-            res_dataset = dcmread(row['file_path'])
+            image_dataset = dcmread(row['file_path'])
 
-            if 'Modality' in req_dataset and req_dataset.Modality == 'mask':
+            if 'Modality' in req_dataset and req_dataset.Modality == 'Overlay':
                 xml_path = next(Path(row['file_path']).parent.glob("*.xml"))
                 if xml_path is None:
                     server.logger.error(f'No XML file found at {row["file_path"]}')
                     yield 0xAA02, None
-                res_dataset = get_mask(res_dataset, xml_path)
+                overlay_dataset = get_mask(image_dataset, xml_path)
                 server.logger.debug(f'C-GET [mask] from {row["file_path"]}')
+                # Pending
+                yield 0xFF00, overlay_dataset
             else:
                 server.logger.debug(f'C-GET [image] from {row["file_path"]}')
-
-            # Pending
-            yield 0xFF00, res_dataset
+                # Pending
+                yield 0xFF00, image_dataset

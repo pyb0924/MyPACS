@@ -53,7 +53,7 @@
                 <view:ToolbarButton DataContext="{StaticResource OpenQRVM}" Command="{Binding OpenQRWindowCommand}"
                                     Source="{Binding Source}" Text="{Binding Text}"/>
                 <Separator/>
-                <view:ToolbarButton DataContext="{StaticResource DetectVM}" Command="{Binding ToggleMaskCommand}"
+                <view:ToolbarButton DataContext="{StaticResource DetectVM}" Command="{Binding ToggleOverlayCommand}"
                                     Source="{Binding Source}" Text="{Binding Text}"/>
                 <Separator/>
                 <view:ToolbarButton DataContext="{StaticResource ExitVM}" Command="{Binding ExitCommmand}"

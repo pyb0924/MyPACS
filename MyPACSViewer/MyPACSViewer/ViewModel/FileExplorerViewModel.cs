@@ -38,12 +38,14 @@ namespace MyPACSViewer.ViewModel
             Messenger.Default.Register<string>(this, Properties.Resources.messageKey_folder, async (folder) =>
             {
                 _DicomDict.Clear();
-                await GenerateFromFolder(folder);
+                var fileCount = await GenerateFromFolder(folder);
+                ShowOpenFolderInfo(fileCount);
             });
             Messenger.Default.Register<List<string>>(this, Properties.Resources.messageKey_series, async (folders) =>
             {
                 _DicomDict.Clear();
-                await GenerateFromSeries(folders);
+                var fileCount = await GenerateFromSeries(folders);
+                ShowOpenFolderInfo(fileCount);
             });
         }
 
@@ -129,53 +131,65 @@ namespace MyPACSViewer.ViewModel
             }
         }
 
-        private async Task GenerateFromFolder(string folder)
+        private async Task<FileCountModel> GenerateFromFolder(string folder)
         {
             DirectoryInfo dir = new(folder);
             FileInfo[] files = dir.GetFiles("*.dcm", SearchOption.AllDirectories);
-            int fileCount = 0;
-            
+
             var openFileTaskList = new List<Task<bool>>();
 
             foreach (var file in files)
             {
                 openFileTaskList.Add(AddToDicomDict(file, false));
             }
+            List<bool> resultList = new(await Task.WhenAll(openFileTaskList));
 
-            while (openFileTaskList.Count > 0)
-            {
-                Task<bool> finishedTask = await Task.WhenAny(openFileTaskList);
-                if (finishedTask.Result)
-                {
-                    fileCount++;
-                }
-                openFileTaskList.Remove(finishedTask);
-            }
 
+            FileTreeDataList = new(_DicomDict.Values);
+
+            FileCountModel fileCount = new();
             foreach (var patientNode in _DicomDict.Values)
             {
+                fileCount.PatientCount++;
                 foreach (var studyNode in patientNode.Children.Values)
                 {
+                    fileCount.StudyCount++;
                     foreach (var seriesNode in studyNode.Children.Values)
                     {
-                        seriesNode.Children = seriesNode.Children.OrderBy(item => item.Value.Index).ToDictionary(item => item.Key, item => item.Value);
+                        fileCount.SeriesCount++;
+                        seriesNode.Children = seriesNode.Children
+                            .OrderBy(item => item.Value.Index)
+                            .ToDictionary(item => item.Key, item => item.Value);
                     }
                 }
             }
-
-            FileTreeDataList = new(_DicomDict.Values);
-            Messenger.Default.Send($"Open {fileCount} Files Successfully! " +
-                $"Total: {files.Length} Files", Properties.Resources.messageKey_status);
+            fileCount.InstanceCount = resultList.Count(item => item);
+            return fileCount;
         }
 
-        private async Task GenerateFromSeries(List<string> folders)
+        private async Task<FileCountModel> GenerateFromSeries(List<string> folders)
         {
-            List<Task> openSeriesTaskList = new();
+            List<Task<FileCountModel>> openSeriesTaskList = new();
             foreach (var folder in folders)
             {
                 openSeriesTaskList.Add(GenerateFromFolder(folder));
             }
-            await Task.WhenAll(openSeriesTaskList);
+            List<FileCountModel> fileCountList = new(await Task.WhenAll(openSeriesTaskList));
+
+            return new FileCountModel()
+            {
+                PatientCount = fileCountList.Sum(item => item.PatientCount),
+                StudyCount = fileCountList.Sum(item => item.StudyCount),
+                SeriesCount = fileCountList.Sum(item => item.SeriesCount),
+                InstanceCount = fileCountList.Sum(item => item.InstanceCount),
+            };
+        }
+
+        private void ShowOpenFolderInfo(FileCountModel fileCount)
+        {
+            Messenger.Default.Send($"Open DICOM Files Successfully! Total: {fileCount.PatientCount} Patients, " +
+                $"{fileCount.StudyCount} Study, {fileCount.SeriesCount} Series, {fileCount.InstanceCount} Instances",
+                Properties.Resources.messageKey_status);
         }
 
         public ICommand SelectedItemChangedCommand => new RelayCommand<FileNodeModel>((selectedItem) =>

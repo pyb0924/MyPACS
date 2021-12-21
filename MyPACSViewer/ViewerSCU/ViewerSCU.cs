@@ -67,12 +67,12 @@ namespace ViewerSCU
             return resDatasetList;
         }
 
-        public async Task<string> RunCGet(string studyInstanceUID, string seriesInstanceUID, bool isMask = false)
+        public async Task<string> RunCGet(string studyInstanceUID, string seriesInstanceUID, bool isOverlay = false)
         {
             DicomCGetRequest request = new(studyInstanceUID, seriesInstanceUID);
-            if (isMask)
+            if (isOverlay)
             {
-                request.Dataset.AddOrUpdate(DicomTag.Modality, "mask");
+                request.Dataset.AddOrUpdate(DicomTag.Modality, "Overlay");
             }
 
             var seriesPath = Path.GetFullPath(StoragePath);
@@ -86,11 +86,11 @@ namespace ViewerSCU
             {
                 Directory.CreateDirectory(seriesPath);
             }
-            
+
             Client.OnCStoreRequest += (DicomCStoreRequest req) =>
             {
                 Console.WriteLine(DateTime.Now.ToString() + $"{req.Dataset.GetSingleValue<string>(DicomTag.SOPInstanceUID)} received");
-                SaveImage(req.Dataset,seriesPath);
+                SaveImage(req.Dataset, seriesPath);
                 return Task.FromResult(new DicomCStoreResponse(req, DicomStatus.Success));
             };
             await Client.AddRequestAsync(request);
@@ -145,7 +145,7 @@ namespace ViewerSCU
             }
         }
 
-        private void SaveImage(DicomDataset dataset,string path)
+        private void SaveImage(DicomDataset dataset, string path)
         {
             var sopUID = dataset.GetSingleValue<string>(DicomTag.SOPInstanceUID).Trim();
             new DicomFile(dataset).Save(Path.Combine(path, sopUID) + ".dcm");
