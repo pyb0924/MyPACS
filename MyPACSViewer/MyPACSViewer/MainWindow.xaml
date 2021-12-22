@@ -13,7 +13,7 @@
         <vm:OpenFileViewModel x:Key="OpenFileVM"/>
         <vm:OpenFolderViewModel x:Key="OpenFolderVM"/>
         <vm:OpenQRViewModel x:Key="OpenQRVM"/>
-        <vm:DetectViewModel x:Key="DetectVM"/>
+        <vm:AnnotationViewModel x:Key="AnnotationVM"/>
         <vm:ExitViewModel x:Key="ExitVM"/>
         <vm:FileExplorerViewModel x:Key="FileExplorerVM"/>
         <vm:StatusViewModel x:Key="StatusVM"/>
@@ -53,7 +53,7 @@
                 <view:ToolbarButton DataContext="{StaticResource OpenQRVM}" Command="{Binding OpenQRWindowCommand}"
                                     Source="{Binding Source}" Text="{Binding Text}"/>
                 <Separator/>
-                <view:ToolbarButton DataContext="{StaticResource DetectVM}" Command="{Binding ToggleOverlayCommand}"
+                <view:ToolbarButton DataContext="{StaticResource AnnotationVM}" Command="{Binding ToggleAnnotationCommand}"
                                     Source="{Binding Source}" Text="{Binding Text}"/>
                 <Separator/>
                 <view:ToolbarButton DataContext="{StaticResource ExitVM}" Command="{Binding ExitCommmand}"
@@ -95,7 +95,7 @@
                                 <Image Source="{Binding Icon}" Height="15" Margin="0,0,5,0"/>
                                 <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}"></TextBlock>
                                 <StackPanel.ToolTip>
-                                    <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" TextWrapping="Wrap" MaxWidth="200"></TextBlock>
+                                    <TextBlock VerticalAlignment="Center" Text="{Binding DisplayName}" TextWrapping="Wrap" MaxWidth="200"/>
                                 </StackPanel.ToolTip>
                             </StackPanel>
                         </HierarchicalDataTemplate>

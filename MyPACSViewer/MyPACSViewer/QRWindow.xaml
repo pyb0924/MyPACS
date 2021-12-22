@@ -35,10 +35,10 @@
                     </GridViewColumn>
                     <GridViewColumn DisplayMemberBinding="{Binding PatientName}" Header="Patient Name"/>
                     <GridViewColumn DisplayMemberBinding="{Binding PatientID}" Header="Patient ID"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding StudyInstanceUID}" Header="Study UID"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding StudyInstanceUID}" Header="Study Instance UID"/>
                     <GridViewColumn DisplayMemberBinding="{Binding Modality}" Header="Modality"/>
                     <GridViewColumn DisplayMemberBinding="{Binding BodyPartExamined}" Header="Body Part"/>
-                    <GridViewColumn DisplayMemberBinding="{Binding SeriesInstanceUID}" Header="Series UID"/>
+                    <GridViewColumn DisplayMemberBinding="{Binding SeriesInstanceUID}" Header="Series Instance UID"/>
                     <GridViewColumn DisplayMemberBinding="{Binding SeriesDescription}" Header="Series Description"/>
                 </GridView>
                 

@@ -117,11 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="detectIcon" xml:space="preserve">
-    <value>Assets/detect.png</value>
+  <data name="annotationIcon" xml:space="preserve">
+    <value>Assets/annotation.png</value>
   </data>
-  <data name="detectStr" xml:space="preserve">
-    <value>Detect Nodules</value>
+  <data name="annotationStr" xml:space="preserve">
+    <value>Show Annotation</value>
   </data>
   <data name="dicomExt" xml:space="preserve">
     <value>.dcm</value>
@@ -137,6 +137,9 @@
   </data>
   <data name="lungIcon" xml:space="preserve">
     <value>Assets/lung.png</value>
+  </data>
+  <data name="messageKey_annotationModeChange" xml:space="preserve">
+    <value>annotationModeChange</value>
   </data>
   <data name="messageKey_close" xml:space="preserve">
     <value>close</value>
@@ -155,9 +158,6 @@
   </data>
   <data name="messageKey_indexChange" xml:space="preserve">
     <value>indexChange</value>
-  </data>
-  <data name="messageKey_overlayModeChanged" xml:space="preserve">
-    <value>overlayModeChanged</value>
   </data>
   <data name="messageKey_selectedChange" xml:space="preserve">
     <value>selectedChange</value>
@@ -209,9 +209,6 @@
   </data>
   <data name="QRStr" xml:space="preserve">
     <value>Query/Retrieve</value>
-  </data>
-  <data name="removeOverlayStr" xml:space="preserve">
-    <value>Remove Nodules</value>
   </data>
   <data name="revertAllStr" xml:space="preserve">
     <value>Revert All</value>

@@ -10,10 +10,11 @@ from pynetdicom import AE, StoragePresentationContexts, evt
 from pynetdicom import sop_class
 
 from database import MyPACSdatabase
-from detect import get_mask
+import adapter
 
 
 class MyPACSServer(AE):
+
     def __init__(self, config_file):
         super().__init__()
 
@@ -43,6 +44,7 @@ class MyPACSServer(AE):
         # init logger
         logging.config.dictConfig(config['logger'])
         self.logger = logging.getLogger('MyPACSLogger')
+        self.adapter_dict = {k: getattr(adapter, v, None) for k, v in config['adapters'].items()}
 
     def run(self):
         self.logger.debug(f'Server running at port {self.port}, AE title: {str(self.ae_title, encoding="utf-8")}')
@@ -152,15 +154,20 @@ class MyPACSServer(AE):
 
             image_dataset = dcmread(row['file_path'])
 
-            if 'Modality' in req_dataset and req_dataset.Modality == 'Overlay':
+            if 'Modality' in req_dataset:
+                annotation_adapter: adapter.AdapterBase = server.adapter_dict.get(row['adapter'], None)
+                if adapter is None:
+                    server.logger.error(f'No adapter found for {row["file_path"]}')
+
                 xml_path = next(Path(row['file_path']).parent.glob("*.xml"))
                 if xml_path is None:
                     server.logger.error(f'No XML file found at {row["file_path"]}')
                     yield 0xAA02, None
-                overlay_dataset = get_mask(image_dataset, xml_path)
+                annotation_dataset = annotation_adapter.get_annotation(image_dataset, str(xml_path),
+                                                                       req_dataset.Modality == 'Overlay')
                 server.logger.debug(f'C-GET [mask] from {row["file_path"]}')
                 # Pending
-                yield 0xFF00, overlay_dataset
+                yield 0xFF00, annotation_dataset
             else:
                 server.logger.debug(f'C-GET [image] from {row["file_path"]}')
                 # Pending

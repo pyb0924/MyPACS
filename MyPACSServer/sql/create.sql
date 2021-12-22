@@ -8,6 +8,7 @@ CREATE TABLE mypacs_test
     body_part_examined  VARCHAR(64),
     series_description  VARCHAR(64),
     series_instance_uid VARCHAR(64)  NOT NULL,
-    file_path     VARCHAR(256) NOT NULL,
+    file_path           VARCHAR(256) NOT NULL,
+    adapter             VARCHAR(16),
     PRIMARY KEY (sop_instance_uid)
 );

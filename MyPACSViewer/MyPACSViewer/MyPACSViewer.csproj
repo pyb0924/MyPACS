@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="View\Assets\detect.png" />
+    <None Remove="View\Assets\annotation.png" />
     <None Remove="View\Assets\direction-adjustment.svg" />
     <None Remove="View\Assets\exit.png" />
     <None Remove="View\Assets\file.png" />
@@ -61,7 +61,7 @@
     <Resource Include="View\Assets\file.png" />
     <Resource Include="View\Assets\flip-horizontal.png" />
     <Resource Include="View\Assets\flip-vertical.png" />
-    <Resource Include="View\Assets\detect.png" />
+    <Resource Include="View\Assets\annotation.png" />
     <Resource Include="icon.ico" />
     <Resource Include="View\Assets\folder.png" />
     <Resource Include="View\Assets\instance.png" />
@@ -98,10 +98,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Resources\" />
   </ItemGroup>
 
 </Project>

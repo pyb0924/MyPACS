@@ -3,23 +3,26 @@ from pydicom import Dataset
 
 
 class AdapterBase(ABC):
-    def __init__(self, annotation_path: str):
-        self.annotation = annotation_path
 
+    @classmethod
     @abstractmethod
-    def _parse_annotation(self):
+    def _parse_annotation(cls, annotation_path: str):
         pass
 
+    @classmethod
     @abstractmethod
-    def get_overlay(self, dataset: Dataset):
+    def _get_overlay(cls, dataset: Dataset, annotation) -> Dataset:
         pass
 
+    @classmethod
     @abstractmethod
-    def get_pixel(self, dataset: Dataset):
+    def _get_pixel(cls, dataset: Dataset, annotation) -> Dataset:
         pass
 
-    def __call__(self, dataset: Dataset, use_overlay=True, **kwargs):
+    @classmethod
+    def get_annotation(cls, dataset: Dataset, annotation_path: str, use_overlay=True, **kwargs) -> Dataset:
+        annotation = cls._parse_annotation(annotation_path)
         if use_overlay:
-            return self.get_overlay(dataset)
+            return cls._get_overlay(dataset, annotation)
         else:
-            return self.get_pixel(dataset)
+            return cls._get_pixel(dataset, annotation)

@@ -61,20 +61,20 @@ namespace MyPACSViewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Assets/detect.png.
+        ///   Looks up a localized string similar to Assets/annotation.png.
         /// </summary>
-        internal static string detectIcon {
+        internal static string annotationIcon {
             get {
-                return ResourceManager.GetString("detectIcon", resourceCulture);
+                return ResourceManager.GetString("annotationIcon", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Detect Nodules.
+        ///   Looks up a localized string similar to Show Annotation.
         /// </summary>
-        internal static string detectStr {
+        internal static string annotationStr {
             get {
-                return ResourceManager.GetString("detectStr", resourceCulture);
+                return ResourceManager.GetString("annotationStr", resourceCulture);
             }
         }
         
@@ -120,6 +120,15 @@ namespace MyPACSViewer.Properties {
         internal static string lungIcon {
             get {
                 return ResourceManager.GetString("lungIcon", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to annotationModeChange.
+        /// </summary>
+        internal static string messageKey_annotationModeChange {
+            get {
+                return ResourceManager.GetString("messageKey_annotationModeChange", resourceCulture);
             }
         }
         
@@ -174,15 +183,6 @@ namespace MyPACSViewer.Properties {
         internal static string messageKey_indexChange {
             get {
                 return ResourceManager.GetString("messageKey_indexChange", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to overlayModeChanged.
-        /// </summary>
-        internal static string messageKey_overlayModeChanged {
-            get {
-                return ResourceManager.GetString("messageKey_overlayModeChanged", resourceCulture);
             }
         }
         
@@ -336,15 +336,6 @@ namespace MyPACSViewer.Properties {
         internal static string QRStr {
             get {
                 return ResourceManager.GetString("QRStr", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Remove Nodules.
-        /// </summary>
-        internal static string removeOverlayStr {
-            get {
-                return ResourceManager.GetString("removeOverlayStr", resourceCulture);
             }
         }
         

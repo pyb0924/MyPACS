@@ -21,6 +21,5 @@ namespace MyPACSViewer.Model
             Path = path;
             Index = index;
         }
-
     }
 }

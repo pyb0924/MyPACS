@@ -104,11 +104,11 @@ namespace ViewerSCU
 
             request.Dataset.AddOrUpdate(DicomTag.SpecificCharacterSet, _Encoding);
             request.Dataset.AddOrUpdate(DicomTag.PatientName, patientName);
-            request.Dataset.AddOrUpdate(DicomTag.StudyInstanceUID, "");
-            request.Dataset.AddOrUpdate(DicomTag.Modality, "");
-            request.Dataset.AddOrUpdate(DicomTag.BodyPartExamined, "");
-            request.Dataset.AddOrUpdate(DicomTag.SeriesInstanceUID, "");
-            request.Dataset.AddOrUpdate(DicomTag.SeriesDescription, "");
+            //request.Dataset.AddOrUpdate(DicomTag.StudyInstanceUID, "");
+            //request.Dataset.AddOrUpdate(DicomTag.Modality, "");
+            //request.Dataset.AddOrUpdate(DicomTag.BodyPartExamined, "");
+            //request.Dataset.AddOrUpdate(DicomTag.SeriesInstanceUID, "");
+            //request.Dataset.AddOrUpdate(DicomTag.SeriesDescription, "");
 
             return request;
         }
@@ -119,11 +119,11 @@ namespace ViewerSCU
 
             request.Dataset.AddOrUpdate(DicomTag.SpecificCharacterSet, _Encoding);
             request.Dataset.AddOrUpdate(DicomTag.PatientID, patientID);
-            request.Dataset.AddOrUpdate(DicomTag.StudyInstanceUID, "");
-            request.Dataset.AddOrUpdate(DicomTag.Modality, "");
-            request.Dataset.AddOrUpdate(DicomTag.BodyPartExamined, "");
-            request.Dataset.AddOrUpdate(DicomTag.SeriesInstanceUID, "");
-            request.Dataset.AddOrUpdate(DicomTag.SeriesDescription, "");
+            //request.Dataset.AddOrUpdate(DicomTag.StudyInstanceUID, "");
+            //request.Dataset.AddOrUpdate(DicomTag.Modality, "");
+            //request.Dataset.AddOrUpdate(DicomTag.BodyPartExamined, "");
+            //request.Dataset.AddOrUpdate(DicomTag.SeriesInstanceUID, "");
+            //request.Dataset.AddOrUpdate(DicomTag.SeriesDescription, "");
 
             return request;
         }

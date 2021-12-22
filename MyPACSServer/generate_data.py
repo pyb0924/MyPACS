@@ -7,10 +7,9 @@ from progress.bar import Bar
 
 from database import MyPACSdatabase
 
-
 config_root = r'./config.json'
 columns = ['sop_instance_uid', 'patient_name', 'patient_id', 'study_instance_uid', 'modality', 'body_part_examined',
-           'series_description', 'series_instance_uid', 'local_file_path']
+           'series_description', 'series_instance_uid', 'local_file_path', 'adapter']
 
 
 def create_db(db):
@@ -37,7 +36,9 @@ def generate_record_dict(path: str):
     dataset = dcmread(path)
     values = [dataset.SOPInstanceUID, dataset.PatientName, dataset.PatientID, dataset.StudyInstanceUID,
               dataset.Modality, dataset.BodyPartExamined, dataset.get("SeriesDescription", "==NONE=="),
-              dataset.SeriesInstanceUID, path]
+              dataset.SeriesInstanceUID, path, None]
+    if 'LIDC' in path:
+        values[-1] = 'LIDC'
     return dict(zip(columns, values))
 
 

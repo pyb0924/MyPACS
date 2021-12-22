@@ -28,7 +28,7 @@
       "file": {
         "class": "logging.handlers.RotatingFileHandler",
         "encoding": "utf-8",
-        "mode":"w",
+        "mode": "w",
         "maxBytes": 100000,
         "backupCount": 3,
         "filename": "MyPACSServer.log",
@@ -44,6 +44,9 @@
         ],
         "level": "DEBUG"
       }
+    },
+    "adapters": {
+      "LIDC": "LIDCAdapter"
     }
   }
 }

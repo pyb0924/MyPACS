@@ -1,17 +1,19 @@
 from pydicom import Dataset
 
-from adapter.adapter_base import AdapterBase
+from .adapter_base import AdapterBase
 
 
 class LIDCAdapter(AdapterBase):
-    def __init__(self, annotation_path: str):
-        super().__init__(annotation_path)
 
-    def _parse_annotation(self):
-        pass
+    @classmethod
+    def _parse_annotation(cls, annotation_path: str):
+        return None
 
-    def get_overlay(self, dataset: Dataset):
-        pass
+    @classmethod
+    def _get_overlay(cls, dataset: Dataset, annotation) -> Dataset:
+        return dataset
 
-    def get_pixel(self, dataset: Dataset):
-        pass
+    @classmethod
+    def _get_pixel(cls, dataset: Dataset, annotation) -> Dataset:
+        dataset.PixelData = annotation
+        return dataset

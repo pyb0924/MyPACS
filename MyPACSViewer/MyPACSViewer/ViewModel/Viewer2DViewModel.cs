@@ -11,6 +11,7 @@ using MyPACSViewer.Utils;
 using System.Configuration;
 using System.IO;
 using System.Threading.Tasks;
+using System;
 
 namespace MyPACSViewer.ViewModel
 {
@@ -18,7 +19,7 @@ namespace MyPACSViewer.ViewModel
     {
         public FileNodeModel SeriesNode { get; set; }
         private DicomDataset _mainDataset;
-        private bool _isOverlayMode;
+        private bool _isAnnotationMode;
 
         #region Properties
         private WriteableBitmap _mainImage;
@@ -115,17 +116,17 @@ namespace MyPACSViewer.ViewModel
         {
             new DicomSetupBuilder().RegisterServices(s => s.AddImageManager<WPFImageManager>()).Build();
             Messenger.Default.Register<RenderSeriesMessage>(this, Properties.Resources.messageKey_selectedChange, OnSelectedChange);
-            Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_detect, OnChangeOverlayMode);
-            _isOverlayMode = false;
+            Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_detect, OnChangeAnnotationMode);
+            _isAnnotationMode = false;
         }
 
         private void RenderImage()
         {
             DicomImage image = new(_mainDataset);
-            image.ShowOverlays = _isOverlayMode;
+            image.ShowOverlays = _isAnnotationMode;
             MainImage = image.RenderImage().As<WriteableBitmap>();
             Messenger.Default.Send($"Rendered Image {SliderValue - SliderMin + 1}/{SliderMax - SliderMin + 1}, " +
-                $"Overlay Mode={_isOverlayMode}", Properties.Resources.messageKey_status);
+                $"Show Annotation={_isAnnotationMode}", Properties.Resources.messageKey_status);
         }
 
         private void RenderCornerInfo()
@@ -158,8 +159,8 @@ namespace MyPACSViewer.ViewModel
             string studyInstanceUID = _mainDataset.GetSingleValueOrDefault(DicomTag.StudyInstanceUID, string.Empty);
             string seriesInstanceUID = _mainDataset.GetSingleValueOrDefault(DicomTag.SeriesInstanceUID, string.Empty);
             string sopInstanceUID = _mainDataset.GetSingleValueOrDefault(DicomTag.SOPInstanceUID, string.Empty);
-            string overlayRoot = ConfigurationManager.AppSettings["overlay"];
-            string filePath = $@"{overlayRoot}\{studyInstanceUID}\{seriesInstanceUID}\{sopInstanceUID + Properties.Resources.dicomExt}";
+            string annotationRoot = ConfigurationManager.AppSettings["annotation"];
+            string filePath = $@"{annotationRoot}\{studyInstanceUID}\{seriesInstanceUID}\{sopInstanceUID + Properties.Resources.dicomExt}";
             FileInfo fileInfo = new(filePath);
 
             if (!fileInfo.Exists)
@@ -169,29 +170,47 @@ namespace MyPACSViewer.ViewModel
                 string server = ConfigurationManager.AppSettings["server"];
                 string aet = ConfigurationManager.AppSettings["aet"];
 
-                ViewerSCU.ViewerSCU scu = new(host, port, server, aet, overlayRoot);
-                Messenger.Default.Send("Retriving Overlay Data from Server...", Properties.Resources.messageKey_status);
+                ViewerSCU.ViewerSCU scu = new(host, port, server, aet, annotationRoot);
+                Messenger.Default.Send("Retriving Data with Annotation from Server...", Properties.Resources.messageKey_status);
                 await scu.RunCGet(studyInstanceUID, seriesInstanceUID, true);
 
             }
             _mainDataset = DicomFile.Open(filePath).Dataset;
         }
 
-        private async void OnChangeOverlayMode(bool overlayMode)
+        private async void OnChangeAnnotationMode(bool isAnnotationMode)
         {
             if (_mainDataset is null)
             {
                 Messenger.Default.Send("No Image Rendered!", Properties.Resources.messageKey_status);
                 return;
             }
-            _isOverlayMode = overlayMode;
-            string overlayType = _mainDataset.GetSingleValueOrDefault(DicomTag.OverlayType, string.Empty);
-            if (_isOverlayMode && string.IsNullOrEmpty(overlayType))
+
+            if (isAnnotationMode)
             {
-                await GetDatasetWithOverlay();
+                string overlayType = _mainDataset.GetSingleValueOrDefault(DicomTag.OverlayType, string.Empty);
+                if (string.IsNullOrEmpty(overlayType))
+                {
+                    try
+                    {
+                        await GetDatasetWithOverlay();
+                        _isAnnotationMode = isAnnotationMode;
+                        RenderImage();
+                    }
+                    catch (Exception ex)
+                    {
+                        Messenger.Default.Send($"C-GET Error: {ex.Message}", Properties.Resources.messageKey_status);
+                    }
+                }
             }
-            Messenger.Default.Send(_isOverlayMode, Properties.Resources.messageKey_overlayModeChanged);
-            RenderImage();
+            else
+            {
+                _isAnnotationMode = isAnnotationMode;
+                RenderImage();
+            }
+
+            Messenger.Default.Send(_isAnnotationMode, Properties.Resources.messageKey_annotationModeChange);
+
         }
         private async void OnSelectedChange(RenderSeriesMessage message)
         {
@@ -203,12 +222,12 @@ namespace MyPACSViewer.ViewModel
             if (SliderValue == imageNode.Index)
             {
                 _mainDataset = DicomFile.Open(imageNode.Path).Dataset;
-                if (_isOverlayMode)
+                if (_isAnnotationMode)
                 {
                     await GetDatasetWithOverlay();
                 }
                 Render();
-                Messenger.Default.Send(_isOverlayMode, Properties.Resources.messageKey_overlayModeChanged);
+                Messenger.Default.Send(_isAnnotationMode, Properties.Resources.messageKey_annotationModeChange);
             }
             else
             {
@@ -225,11 +244,22 @@ namespace MyPACSViewer.ViewModel
             var query = from node in SeriesNode.Children.Values where node.Index == SliderValue select node;
             FileNodeModel imageNode = query.First();
             _mainDataset = DicomFile.Open(imageNode.Path).Dataset;
-            if (_isOverlayMode)
+            if (_isAnnotationMode)
             {
-                await GetDatasetWithOverlay();
+                try
+                {
+                    await GetDatasetWithOverlay();
+                    Render();
+                }
+                catch (Exception ex)
+                {
+                    Messenger.Default.Send($"Error Running C-GET(with annotation): {ex.Message}", Properties.Resources.messageKey_status);
+                }
             }
-            Render();
+            else
+            {
+                Render();
+            }
         });
     }
 }
