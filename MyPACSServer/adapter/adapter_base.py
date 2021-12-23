@@ -6,11 +6,6 @@ class AdapterBase(ABC):
 
     @classmethod
     @abstractmethod
-    def _parse_annotation(cls, annotation_path: str):
-        pass
-
-    @classmethod
-    @abstractmethod
     def _get_overlay(cls, dataset: Dataset, annotation) -> Dataset:
         pass
 
@@ -20,9 +15,8 @@ class AdapterBase(ABC):
         pass
 
     @classmethod
-    def get_annotation(cls, dataset: Dataset, annotation_path: str, use_overlay=True, **kwargs) -> Dataset:
-        annotation = cls._parse_annotation(annotation_path)
+    def get_annotation(cls, dataset: Dataset, annotation_path: str, use_overlay=True) -> Dataset:
         if use_overlay:
-            return cls._get_overlay(dataset, annotation)
+            return cls._get_overlay(dataset, annotation_path)
         else:
-            return cls._get_pixel(dataset, annotation)
+            return cls._get_pixel(dataset, annotation_path)
