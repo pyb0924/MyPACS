@@ -29,7 +29,7 @@ class LIDCAdapter(AdapterBase):
     @classmethod
     def _get_overlay(cls, dataset: Dataset, annotation_path: str) -> Dataset:
         annotation = cls._parse_annotation(dataset, annotation_path)
-        elem_overlay_type = pydicom.DataElement(0x60000040, VR='CS', value='R')
+        elem_overlay_type = pydicom.DataElement(0x60000040, VR='CS', value='GRAPHICS ')
         dataset.add(elem_overlay_type)
         elem_overlay_rows = pydicom.DataElement(0x60000010, VR='US', value=dataset.Rows)
         dataset.add(elem_overlay_rows)
