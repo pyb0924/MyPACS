@@ -23,6 +23,9 @@
     </Slider>
 
     <Grid>
+        <!--<i:Interaction.Triggers>
+            <i:EventTrigger EventName="MouseMoved"
+        </i:Interaction.Triggers>-->
         <Image x:Name="DicomImage" Source="{Binding MainImage}"/>
         <Canvas Width="auto" Height="auto">
             <TextBlock Foreground="Gainsboro" FontFamily="Consolas" FontSize="18" TextAlignment="Left" Canvas.Left="10" Canvas.Top="10" Text="{Binding LeftTopText}"/>

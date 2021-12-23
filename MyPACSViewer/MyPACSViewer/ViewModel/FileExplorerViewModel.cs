@@ -27,7 +27,7 @@ namespace MyPACSViewer.ViewModel
                 RaisePropertyChanged(() => FileTreeDataList);
             }
         }
-
+        // TODO message clear rendering  
         public FileExplorerViewModel()
         {
             Messenger.Default.Register<string>(this, Properties.Resources.messageKey_file, async (file) =>

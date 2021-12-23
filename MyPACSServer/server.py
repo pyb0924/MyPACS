@@ -164,7 +164,7 @@ class MyPACSServer(AE):
                     yield 0xAA02, None
                 annotation_dataset = annotation_adapter.get_annotation(
                     image_dataset, str(row['annotation']), req_dataset.Modality == 'Overlay')
-                server.logger.debug(f'C-GET [mask] from {row["file_path"]}')
+                server.logger.debug(f'C-GET [annotation] from {row["file_path"]}')
                 # Pending
                 yield 0xFF00, annotation_dataset
             else:

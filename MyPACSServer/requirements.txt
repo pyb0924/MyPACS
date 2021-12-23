@@ -4,3 +4,5 @@ records~=0.5.3
 SQLAlchemy~=1.4.28
 click~=8.0.3
 progress~=1.6
+numpy~=1.21.5
+lxml~=4.7.1

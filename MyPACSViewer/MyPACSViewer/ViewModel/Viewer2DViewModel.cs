@@ -144,7 +144,8 @@ namespace MyPACSViewer.ViewModel
                 $"Images: {SliderValue - SliderMin + 1}/{SliderMax - SliderMin + 1}\n" +
                 $"Series: {_mainDataset.GetSingleValueOrDefault(DicomTag.SeriesNumber, string.Empty)}";
 
-            RightBottomText = $"WL: {_mainDataset.GetSingleValueOrDefault(DicomTag.WindowCenter, 0)} " +
+            RightBottomText = $"Overlay Type: {_mainDataset.GetSingleValueOrDefault(DicomTag.OverlayType,"None")}\n" +
+                $"WL: {_mainDataset.GetSingleValueOrDefault(DicomTag.WindowCenter, 0)} " +
                 $"WW: {_mainDataset.GetSingleValueOrDefault(DicomTag.WindowWidth, 0)}";
         }
 
@@ -195,7 +196,7 @@ namespace MyPACSViewer.ViewModel
                     {
                         await GetDatasetWithOverlay();
                         _isAnnotationMode = isAnnotationMode;
-                        RenderImage();
+                        Render();
                     }
                     catch (Exception ex)
                     {
@@ -206,7 +207,7 @@ namespace MyPACSViewer.ViewModel
             else
             {
                 _isAnnotationMode = isAnnotationMode;
-                RenderImage();
+                Render();
             }
 
             Messenger.Default.Send(_isAnnotationMode, Properties.Resources.messageKey_annotationModeChange);
