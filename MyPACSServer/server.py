@@ -159,12 +159,11 @@ class MyPACSServer(AE):
                 if adapter is None:
                     server.logger.error(f'No adapter found for {row["file_path"]}')
 
-                xml_path = next(Path(row['file_path']).parent.glob("*.xml"))
-                if xml_path is None:
+                if not Path(row['annotation']).exists():
                     server.logger.error(f'No XML file found at {row["file_path"]}')
                     yield 0xAA02, None
-                annotation_dataset = annotation_adapter.get_annotation(image_dataset, str(xml_path),
-                                                                       req_dataset.Modality == 'Overlay')
+                annotation_dataset = annotation_adapter.get_annotation(
+                    image_dataset, str(row['annotation']), req_dataset.Modality == 'Overlay')
                 server.logger.debug(f'C-GET [mask] from {row["file_path"]}')
                 # Pending
                 yield 0xFF00, annotation_dataset

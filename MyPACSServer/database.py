@@ -13,12 +13,10 @@ class MyPACSdatabase(records.Database):
         try:
             self.query(query, **kwargs)
         except ResourceClosedError:
-            logger = logging.getLogger('MyPACSLogger')
-            logger.warning("Query return no results")
+            pass
 
     def query_file_return_none(self, query_file: str, **kwargs):
         try:
             self.query_file(query_file, fetchall=True, **kwargs)
         except ResourceClosedError:
-            logger = logging.getLogger('MyPACSLogger')
-            logger.warning("Query return no results")
+            pass

@@ -9,7 +9,7 @@ from database import MyPACSdatabase
 
 config_root = r'./config.json'
 columns = ['sop_instance_uid', 'patient_name', 'patient_id', 'study_instance_uid', 'modality', 'body_part_examined',
-           'series_description', 'series_instance_uid', 'local_file_path', 'adapter']
+           'series_description', 'series_instance_uid', 'local_file_path', 'adapter', 'annotation']
 
 
 def create_db(db):
@@ -36,9 +36,11 @@ def generate_record_dict(path: str):
     dataset = dcmread(path)
     values = [dataset.SOPInstanceUID, dataset.PatientName, dataset.PatientID, dataset.StudyInstanceUID,
               dataset.Modality, dataset.BodyPartExamined, dataset.get("SeriesDescription", "==NONE=="),
-              dataset.SeriesInstanceUID, path, None]
+              dataset.SeriesInstanceUID, path, None, None]
     if 'LIDC' in path:
-        values[-1] = 'LIDC'
+        values[-2] = 'LIDC'
+        xml_file = list(Path(path).parent.glob('*.xml'))
+        values[-1] = str(xml_file[0]) if len(xml_file) > 0 else None
     return dict(zip(columns, values))
 
 

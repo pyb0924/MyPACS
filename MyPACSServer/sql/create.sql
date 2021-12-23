@@ -10,5 +10,6 @@ CREATE TABLE mypacs_test
     series_instance_uid VARCHAR(64)  NOT NULL,
     file_path           VARCHAR(256) NOT NULL,
     adapter             VARCHAR(16),
+    annotation          VARCHAR(256),
     PRIMARY KEY (sop_instance_uid)
 );
