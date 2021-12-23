@@ -1,5 +1,6 @@
 from pydicom import Dataset
-
+import lxml
+import numpy as np
 from .adapter_base import AdapterBase
 
 

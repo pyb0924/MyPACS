@@ -1,6 +1,5 @@
 import records
 from sqlalchemy.exc import ResourceClosedError
-import logging
 
 
 class MyPACSdatabase(records.Database):

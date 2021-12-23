@@ -1,5 +1,4 @@
 pydicom~=2.2.2
-pytest~=6.2.5
 pynetdicom~=1.5.7
 records~=0.5.3
 SQLAlchemy~=1.4.28
