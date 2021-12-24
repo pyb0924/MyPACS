@@ -12,6 +12,8 @@
 - Database
   - MySQL 8.0
 
+
+
 ## Overview
 
 - 一个自己实现的完整的基于DICOM协议的PACS系统。
@@ -36,12 +38,17 @@
 3. 用户可以对图像进行简单的处理，这一部分的处理在MyPACSViewer内部进行。
 4. 用户在自定义Adapter后，通过在C-GET Request中插入特定的Tag信息，可以使MyPACSServer返回相应的带标注的处理结果返回前端进行可视化。
 
+
+
 ## Submodules
 
 ### [MyPACSViewer](./MyPACSViewer)
 
 - 一个基于WPF开发的DICOM Viewer,使用MVVM设计模式（Model-View-ViewModel）。
+
 - DICOM协议使用fo-dicom库。
+
+- 内部集成了一个DICOM Q-R SCU，可用于与MyPACSServer通信。
 
   ![MyPACS-ui](images/ui.png)
 
@@ -52,6 +59,7 @@
 - DICOM协议使用[pydicom](https://github.com/pydicom/pydicom)和[pynetdicom](https://github.com/pydicom/pynetdicom)库。
 - 数据库可以自行配置。使用[records](https://github.com/kennethreitz/records)库进行连接和处理。在本项目中使用MySQL作为示例。
 - 使用Python内置的logging模块在控制台输出日志并写入文件。
+- 集成了数据集标注的Adapter，用于统一转换标注数据。
 
 ### [Adapter](./MyPACSServer/adapter)
 
