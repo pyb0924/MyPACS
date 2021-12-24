@@ -119,7 +119,6 @@ namespace MyPACSViewer.ViewModel
             Messenger.Default.Register<bool>(this, Properties.Resources.messageKey_detect, OnChangeAnnotationMode);
             _isAnnotationMode = false;
         }
-
         private void RenderImage()
         {
             DicomImage image = new(_mainDataset);
@@ -144,7 +143,7 @@ namespace MyPACSViewer.ViewModel
                 $"Images: {SliderValue - SliderMin + 1}/{SliderMax - SliderMin + 1}\n" +
                 $"Series: {_mainDataset.GetSingleValueOrDefault(DicomTag.SeriesNumber, string.Empty)}";
 
-            RightBottomText = $"Overlay Type: {_mainDataset.GetSingleValueOrDefault(DicomTag.OverlayType,"None")}\n" +
+            RightBottomText = $"Overlay Type: {_mainDataset.GetSingleValueOrDefault(DicomTag.OverlayType, "None")}\n" +
                 $"WL: {_mainDataset.GetSingleValueOrDefault(DicomTag.WindowCenter, 0)} " +
                 $"WW: {_mainDataset.GetSingleValueOrDefault(DicomTag.WindowWidth, 0)}";
         }
@@ -242,8 +241,18 @@ namespace MyPACSViewer.ViewModel
             {
                 return;
             }
-            var query = from node in SeriesNode.Children.Values where node.Index == SliderValue select node;
-            FileNodeModel imageNode = query.First();
+
+            FileNodeModel imageNode;
+            if (SeriesNode.Children.Count == 1)
+            {
+                imageNode = SeriesNode.Children.Values.First();
+            }
+            else
+            {
+                var query = from node in SeriesNode.Children.Values where node.Index == SliderValue select node;
+                imageNode = query.First();
+            }
+
             _mainDataset = DicomFile.Open(imageNode.Path).Dataset;
             if (_isAnnotationMode)
             {

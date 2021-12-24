@@ -44,6 +44,8 @@ class MyPACSServer(AE):
         # init logger
         logging.config.dictConfig(config['logger'])
         self.logger = logging.getLogger('MyPACSLogger')
+
+        # init adapter
         self.adapter_dict = {k: getattr(adapter, v, None) for k, v in config['adapters'].items()}
 
     def run(self):

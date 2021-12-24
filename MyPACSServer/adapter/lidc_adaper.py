@@ -9,27 +9,26 @@ from .adapter_base import AdapterBase
 class LIDCAdapter(AdapterBase):
 
     @classmethod
-    def _parse_annotation(cls, dataset: Dataset, annotation_path: str):
+    def _parse_annotation(cls, dataset: Dataset, annotation_path: str) -> np.ndarray:
         tree = etree.parse(annotation_path, etree.XMLParser())
         root = tree.getroot()
         reading_session = root.find(path='readingSession', namespaces=root.nsmap)
         roi_list = reading_session.findall(
-            path=f'unblindedReadNodule[characteristics]/roi[imageSOP_UID="{dataset.SOPInstanceUID}"]',
+            f'unblindedReadNodule[characteristics]/roi[imageSOP_UID="{dataset.SOPInstanceUID}"]',
             namespaces=root.nsmap)
-        # print(dataset.SOPInstanceUID)
         annotation_array = np.zeros([dataset.Rows, dataset.Columns])
         for roi in roi_list:
             edgemap_list = roi.findall('edgeMap', namespaces=root.nsmap)
             for edgemap in edgemap_list:
-                xCoord_edgemap = edgemap.find('xCoord', namespaces=root.nsmap).text
-                yCoord_edgemap = edgemap.find('yCoord', namespaces=root.nsmap).text
-                annotation_array[int(yCoord_edgemap), int(xCoord_edgemap)] = 1
+                xCoord = edgemap.find('xCoord', namespaces=root.nsmap).text
+                yCoord = edgemap.find('yCoord', namespaces=root.nsmap).text
+                annotation_array[int(yCoord), int(xCoord)] = 1
         return annotation_array
 
     @classmethod
     def _get_overlay(cls, dataset: Dataset, annotation_path: str) -> Dataset:
         annotation = cls._parse_annotation(dataset, annotation_path)
-        elem_overlay_type = pydicom.DataElement(0x60000040, VR='CS', value='GRAPHICS ')
+        elem_overlay_type = pydicom.DataElement(0x60000040, VR='CS', value='GRAPHICS')
         dataset.add(elem_overlay_type)
         elem_overlay_rows = pydicom.DataElement(0x60000010, VR='US', value=dataset.Rows)
         dataset.add(elem_overlay_rows)
