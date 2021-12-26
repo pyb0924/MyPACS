@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:MyPACSViewer"
         xmlns:vm="clr-namespace:MyPACSViewer.ViewModel"
         mc:Ignorable="d"
-        Title="Configure Query/Retrieve" Height="480" Width="640">
+        Title="Configure Query/Retrieve" Height="720" Width="960">
     <Window.DataContext>
         <vm:QRViewModel/>
     </Window.DataContext>

@@ -27,7 +27,6 @@ namespace MyPACSViewer.ViewModel
                 RaisePropertyChanged(() => FileTreeDataList);
             }
         }
-        // TODO message clear rendering  
         public FileExplorerViewModel()
         {
             Messenger.Default.Register<string>(this, Properties.Resources.messageKey_file, async (file) =>
@@ -135,15 +134,12 @@ namespace MyPACSViewer.ViewModel
         {
             DirectoryInfo dir = new(folder);
             FileInfo[] files = dir.GetFiles("*.dcm", SearchOption.AllDirectories);
-
             var openFileTaskList = new List<Task<bool>>();
-
             foreach (var file in files)
             {
                 openFileTaskList.Add(AddToDicomDict(file, false));
             }
             List<bool> resultList = new(await Task.WhenAll(openFileTaskList));
-
 
             FileTreeDataList = new(_DicomDict.Values);
 

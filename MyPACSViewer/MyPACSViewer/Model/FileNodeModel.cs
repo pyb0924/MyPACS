@@ -11,7 +11,6 @@ namespace MyPACSViewer.Model
         public Dictionary<string, FileNodeModel> Children { get; set; } = new();
         public bool IsExpanded { get; set; }
         public bool IsSelected { get; set; }
-
         public int Index { get; set; }
 
         public FileNodeModel(string name, string icon, string path = null, int index = -1)

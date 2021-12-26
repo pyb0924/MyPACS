@@ -178,6 +178,8 @@ namespace MyPACSViewer.ViewModel
             _mainDataset = DicomFile.Open(filePath).Dataset;
         }
 
+        //TODO WL/WW adjust by Mouse Drag
+
         private async void OnChangeAnnotationMode(bool isAnnotationMode)
         {
             if (_mainDataset is null)
