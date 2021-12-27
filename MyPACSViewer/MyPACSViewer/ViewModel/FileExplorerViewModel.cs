@@ -51,7 +51,6 @@ namespace MyPACSViewer.ViewModel
         private async Task<bool> AddToDicomDict(FileInfo file, bool selected)
         {
             string tmp;
-            int index;
             DicomFile dcmFile;
             DicomDataset dcmDataSet;
             FileNodeModel patientNode, studyNode, seriesNode, imageNode;
