@@ -15,9 +15,12 @@ namespace MyPACSViewer.ViewModel
             Messenger.Default.Register<string>(this, Properties.Resources.messageKey_close, msg =>
             {
                 _qrConfigWindow.DialogResult = false;
-                _qrConfigWindow = new();
             });
         }
-        public ICommand OpenQRWindowCommand => new RelayCommand(() => _qrConfigWindow.ShowDialog());
+        public ICommand OpenQRWindowCommand => new RelayCommand(() =>
+        {
+            _qrConfigWindow = new();
+            _qrConfigWindow.ShowDialog();
+        });
     }
 }

@@ -8,7 +8,8 @@
         xmlns:view="clr-namespace:MyPACSViewer.View"
         xmlns:vm="clr-namespace:MyPACSViewer.ViewModel"
         mc:Ignorable="d"
-        Title="MyPACSViewer" Icon="/icon.ico" Height="720" Width="1280">
+        Title="MyPACSViewer" Icon="/icon.ico" Height="720" Width="1280"
+        Closing="Window_Closing">
     <Window.Resources>
         <vm:OpenFileViewModel x:Key="OpenFileVM"/>
         <vm:OpenFolderViewModel x:Key="OpenFolderVM"/>
@@ -27,7 +28,7 @@
                     <MenuItem Header="Query/Retrive" DataContext="{StaticResource OpenQRVM}" Command="{Binding OpenQRWindowCommand}"/>
                     <Separator/>
                     <MenuItem Header="Export"/>
-                    <MenuItem Header="Exit" DataContext="{StaticResource ExitVM}" Command="{Binding ExitCommmand}"/>
+                    <MenuItem Header="Exit" DataContext="{StaticResource ExitVM}" Command="{Binding ExitCommand}"/>
                 </MenuItem>
 
                 <MenuItem Header="Image">
@@ -56,7 +57,7 @@
                 <view:ToolbarButton DataContext="{StaticResource AnnotationVM}" Command="{Binding ToggleAnnotationCommand}"
                                     Source="{Binding Source}" Text="{Binding Text}"/>
                 <Separator/>
-                <view:ToolbarButton DataContext="{StaticResource ExitVM}" Command="{Binding ExitCommmand}"
+                <view:ToolbarButton DataContext="{StaticResource ExitVM}" Command="{Binding ExitCommand}"
                                     Source="{Binding Source}" Text="{Binding Text}"/>
 
             </ToolBar>

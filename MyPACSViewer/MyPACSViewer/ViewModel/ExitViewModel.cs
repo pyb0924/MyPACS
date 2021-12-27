@@ -12,6 +12,6 @@ namespace MyPACSViewer.ViewModel
             Text = Properties.Resources.exitStr;
         }
 
-        public ICommand ExitCommmand => new RelayCommand(() => Application.Current.Shutdown());
+        public ICommand ExitCommand => new RelayCommand(() => Application.Current.Shutdown());
     }
 }
