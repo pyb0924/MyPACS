@@ -14,8 +14,8 @@ class LIDCAdapter(AdapterBase):
         root = tree.getroot()
         reading_session = root.find(path='readingSession', namespaces=root.nsmap)
         roi_list = reading_session.findall(
-            f'unblindedReadNodule[characteristics]/roi[imageSOP_UID="{dataset.SOPInstanceUID}"]',
-            namespaces=root.nsmap)
+            f'unblindedReadNodule[characteristics]/roi[imageSOP_UID='
+            f'"{dataset.SOPInstanceUID}"]', namespaces=root.nsmap)
         annotation_array = np.zeros([dataset.Rows, dataset.Columns])
         for roi in roi_list:
             edgemap_list = roi.findall('edgeMap', namespaces=root.nsmap)
