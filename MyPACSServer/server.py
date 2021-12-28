@@ -34,8 +34,8 @@ class MyPACSServer(AE):
         self.add_supported_context(sop_class.PatientRootQueryRetrieveInformationModelFind)
         self.add_supported_context(sop_class.StudyRootQueryRetrieveInformationModelGet)
         self.handlers = [
-            (evt.EVT_C_FIND, self.handle_find_wrapper()),
-            (evt.EVT_C_GET, self.handle_get_wrapper())
+            (evt.EVT_C_FIND, partial(self.handle_find, server=self)),
+            (evt.EVT_C_GET, partial(self.handle_get, server=self))
         ]
 
         # init database
@@ -51,12 +51,6 @@ class MyPACSServer(AE):
     def run(self):
         self.logger.debug(f'Server running at port {self.port}, AE title: {str(self.ae_title, encoding="utf-8")}')
         self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers)
-
-    def handle_find_wrapper(self):
-        return partial(self.handle_find, server=self)
-
-    def handle_get_wrapper(self):
-        return partial(self.handle_get, server=self)
 
     @staticmethod
     def handle_find(event, server):

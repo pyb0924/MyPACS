@@ -44,9 +44,9 @@
         ],
         "level": "DEBUG"
       }
-    },
-    "adapters": {
-      "LIDC": "LIDCAdapter"
     }
+  },
+  "adapters": {
+    "LIDC": "LIDCAdapter"
   }
 }

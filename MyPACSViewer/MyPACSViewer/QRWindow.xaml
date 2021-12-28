@@ -7,7 +7,8 @@
         xmlns:local="clr-namespace:MyPACSViewer"
         xmlns:vm="clr-namespace:MyPACSViewer.ViewModel"
         mc:Ignorable="d"
-        Title="Configure Query/Retrieve" Height="720" Width="960">
+        Title="Configure Query/Retrieve" Icon="/icon.ico"
+        Height="720" Width="960">
     <i:Interaction.Triggers>
         <i:EventTrigger EventName="Closing">
             <i:InvokeCommandAction Command="{Binding CancelCommand}"/>
