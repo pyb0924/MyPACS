@@ -1,5 +1,5 @@
 pydicom~=2.2.2
-pynetdicom~=1.5.7
+pynetdicom~=2.0.1
 records~=0.5.3
 click~=8.0.3
 progress~=1.6

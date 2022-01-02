@@ -49,7 +49,7 @@ class MyPACSServer(AE):
         self.adapter_dict = {k: getattr(adapter, v, None) for k, v in config['adapters'].items()}
 
     def run(self):
-        self.logger.debug(f'Server running at port {self.port}, AE title: {str(self.ae_title, encoding="utf-8")}')
+        self.logger.debug(f'Server running at port {self.port}, AE title: {self.ae_title}')
         self.start_server(('localhost', self.port), ae_title=self.ae_title, evt_handlers=self.handlers)
 
     @staticmethod
